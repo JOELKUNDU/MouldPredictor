@@ -189,7 +189,7 @@ def database_page():
                     return serverExportCSV()
                 else:
                     if exportCSV():
-                        flash('Dataset exported successfully', 'success')
+                        flash('Dataset exported to database.csv on your desktop', 'success')
                         return redirect(url_for('database_page'))
                     else:
                         flash('Dataset could not be exported as Database.csv file already exists on your desktop', 'error')
@@ -230,6 +230,10 @@ def database_page():
 @app.route('/help-page')
 def help_page():
     return render_template('help.html')
+
+@app.route('/documentation')
+def documentation():
+    return render_template('doc.html')
 
 
 

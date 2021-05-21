@@ -1,4 +1,4 @@
-from predictor import app
+from predictor import app, state
 from predictor import ui as ui
 
 if __name__ == '__main__':

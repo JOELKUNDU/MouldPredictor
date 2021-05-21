@@ -1,13 +1,9 @@
 CC = g++
 
-# the build target executable:
-TARGET = Predictor
-CFLAGS = -I
+TARGET = Predictor-linux
 
 all: $(TARGET)
 
-$(TARGET): source.c++
-$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
+$(TARGET): source.cpp
+$(CC) -o $(TARGET) source.cpp
 
-clean:
-$(RM) $(TARGET)

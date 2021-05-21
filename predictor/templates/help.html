@@ -5,6 +5,43 @@ Help Page
 {% block content %}
 <div class="page-body dark2 para-text">
 <h1 id="moulding-machine-parameter-predictor">Moulding Machine Parameter Predictor</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#download">Download</a></li>
+<li><a href="#installation">Installation</a>
+<ul>
+<li><a href="#to-run-as-a-desktop-app">As a Desktop App</a></li>
+<li><a href="#to-run-as-a-web-app">As a Web App</a></li>
+</ul>
+</li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#finding-optimal-machine-parameters-parameters">Finding optimal machine parameters parameters</a></li>
+<li><a href="#managing-the-database">Managing the database</a>
+<ul>
+<li><a href="#adding-a-single-new-entry-to-the-database">Adding a single new entry to the database</a></li>
+<li><a href="#adding-data-entries-from-a-csv-file">Adding data entries from a csv file</a></li>
+<li><a href="#deleting-one-entry-from-the-database">Deleting one entry from the database</a></li>
+<li><a href="#deleting-the-entire-database">Deleting the entire database</a></li>
+<li><a href="#export-entire-database-as-a-csv">Export entire database as a CSV</a></li>
+<li><a href="#export-csv-format-to-add-data-to-the-database">Export CSV Format to add data to the database</a></li>
+</ul>
+</li>
+<li><a href="#managing-the-artificial-neural-network">Managing the Artificial Neural Network</a>
+<ul>
+<li><a href="#understanding-the-performance-of-the-ann">Understanding the performance of the ANN</a></li>
+<li><a href="#retrain-the-model">Retrain the model</a></li>
+<li><a href="#hypertuning-the-model">HyperTuning the Model</a></li>
+</ul>
+</li>
+<li><a href="#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li><a href="#author-and-license">Author and License</a></li>
+<li><a href="#contact">Contact</a></li>
+</ol>
 <h2 id="introduction">Introduction</h2>
 <p>Injection moulding is the most popular and widely used manufacturing process for the mass production of plastic products. In the process, a polymer is melted by electric and frictional heat and is injected into a metal mould under high pressure. The quality of the part produced is greatly influenced by process conditions. These process conditions can be changed by changing the machine parameters and is usually done by an experienced engineer. Whenever a new mould is created an engineer will experimentally determine the optimal parameters via repeated trials and visual inspection of the created product. This method is necessary as there is no theoretical method to predict the quality of the part produced given a set of machine parameters. This makes the process highly dependant on the knowledge and experience of the engineer which makes it hard to transfer the skill to a new operator. Wastage in the form of defective products, machine downtime, labour and energy also happen due to the experimental method. Another alternative to the experimental method is simulations. However, simulations are slow and computationally expensive.</p>
 <p>Machine learning is a subset of artificial intelligence and is the area of computational science that focuses on analysing and interpreting pattern and structures in data to enable learning, reasoning and decision making outside of human interaction. Machine learning allows the user to feed a computer algorithm with a lot of data and have the computer analyse and make data-driven recommendations and decisions based on only the input data. Leveraging these benefits of machine learning, the author is designing a utility that can predict the optimal machine parameters as an output while taking mould geometry details, raw material properties and known process parameters as the inputs.</p>
@@ -27,32 +64,40 @@ pip install flask-wtf
 pip install wtforms
 pip install pyfladesk
 pip install sklearn
-pip install tensorflow
 pip install numpy
 pip install pandas
 pip install joblib
 </code></pre>
+<h2 id="download">Download</h2>
+<h5 id="option-1-">Option 1 :</h5>
+<p>Users can download the archive from <a href="https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip">here</a>.</p>
+<h5 id="option-2">Option 2:</h5>
+<p>Users can clone this repository using <strong>git</strong>, using the following commands.</p>
+<pre><code>git clone https://github.com/JOELKUNDU/MouldPredictor.git
+cd MouldPredictor
+</code></pre>
 <h2 id="installation">Installation</h2>
-<p>The utility is provided as a .zip archive. The user has to simply extract the archive to install the utility.</p>
-<h4 id="on-windows-1">ON WINDOWS</h4>
+<p>The user has to first extract the .zip archive that he has downloaded.</p>
+<h4 id="to-run-as-a-desktop-app">TO RUN AS A DESKTOP APP</h4>
+<h5 id="on-windows-1">ON WINDOWS</h5>
 <p>To run the utility on Windows, the user needs to run <strong>Predictor.exe</strong></p>
-<h4 id="on-linux-1">ON LINUX</h4>
-<p>To run the utility on Linux, the user can use the following command in the terminal ( in the directory )</p>
-<pre><code>python3 run.py
+<h5 id="on-linux-1">ON LINUX</h5>
+<p>To run the utility on Linux as a desktop app, the user can use the following command in the terminal ( in the directory )</p>
+<pre><code>make
 </code></pre>
-<p>or</p>
-<pre><code>python run.py
-</code></pre>
+<p>This will make an executable with the name <strong>Predictor-linux</strong> which the user can then run.</p>
 <h4 id="to-run-as-a-web-app">TO RUN AS A WEB APP</h4>
 <p>The utility can be used as a desktop app or it can also be used as a web app hosted on a server.<br>
 To host the utility on a server, the user has to follow the following steps.</p>
 <ul>
-<li>Extract the .zip archive on a server</li>
-<li>Make sure all the dependencies are present. If not please refer to the dependencies section</li>
-<li>Run the following command in the terminal<pre><code>python run-server.py
+<li>The user has to install gunicorn with the command given below.<pre><code>pip install gunicorn
 </code></pre>
 </li>
-<li>The web app would be hosted on https://{ip address of the server}/5000/</li>
+<li>Make sure all the dependencies are present. If not please refer to the dependencies section</li>
+<li>The user has to then open the terminal in the directory where the utility is saved and run the following command.<pre><code>gunicorn -w 4 -b 127.0.0.1:5000 run_server:app
+</code></pre>
+</li>
+<li>The web app would be hosted on <strong>https://{ip address of the server}/5000/</strong></li>
 </ul>
 <h2 id="usage">Usage</h2>
 <h3 id="finding-optimal-machine-parameters-parameters">Finding optimal machine parameters parameters</h3>
@@ -73,11 +118,12 @@ To host the utility on a server, the user has to follow the following steps.</p>
 <li>The new entry would be the last in the database.</li>
 </ul>
 <h4 id="adding-data-entries-from-a-csv-file">Adding data entries from a csv file</h4>
-<p>Before adding data from a CSV file, the user must ensure that <strong>the columns in the csv file match the order of columns as shown in the database</strong> displayed in the <strong>Database</strong> tab.<br>
-To add data entries via a csv file the users have to follow the following steps.</p>
+<p>Before adding data from a CSV file, the user must ensure that <strong>the columns in the csv file match the order of columns as shown in the database</strong> displayed in the <strong>Database</strong> tab.
+    To ensure this the user can get the correct format by clicking on the <strong>GET CSV FORMAT</strong> button shown in the database tab.
+    To add data entries via a csv file the users have to follow the following steps.</p>
 <ul>
 <li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
-<li>The user has to type in the path to the csv file in the text field beside <strong>CSV file path</strong> in the <strong>Upload CSV file with data</strong> form.</li>
+<li>The user has to click on <strong>Choose file</strong> and then select the file in the dialog box that will open.</li>
 <li>The user has to then click on the <strong>ADD</strong> button below the text field.</li>
 <li>The new entries will be appended to the existing database.</li>
 </ul>
@@ -103,7 +149,17 @@ To add data entries via a csv file the users have to follow the following steps.
 <li>The user has to scroll down to the bottom of the screen.</li>
 <li>The user has to click on the green button labelled <strong>EXPORT DATABASE AS CSV</strong></li>
 <li>The entire database will be exported as a database.csv file on the desktop<br>
-<strong>NOTE</strong>: Please ensure there are no database.csv file on the desktop as they will be overwritten by the program</li>
+NOTE: Please ensure there is no database.csv file on the desktop else the function will fail.</li>
+<li>If the application is being used as a web app then the file will simply be downloaded on the client system.</li>
+</ul>
+<h4 id="export-csv-format-to-add-data-to-the-database">Export CSV Format to add data to the database</h4>
+<p>To export the CSV format that the user can use to input data to the dataset the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to click on the <strong>GET CSV FORMAT</strong> button on the right of the add data via csv form.</li>
+<li>Format.csv file will be placed on the user’s desktop.<br>
+NOTE Please ensure there is no Format.csv file on the desktop else the function will fail.</li>
+<li>If the application is being used as a web app then the file will simply be downloaded on the client system.</li>
 </ul>
 <h3 id="managing-the-artificial-neural-network">Managing the Artificial Neural Network</h3>
 <h4 id="understanding-the-performance-of-the-ann">Understanding the performance of the ANN</h4>
@@ -138,7 +194,8 @@ The performance of the model can also be increased by occasionally hypertunning 
 <li><strong>NOTE</strong>: This process will take time.</li>
 </ul>
 <h3 id="getting-help">Getting Help</h3>
-<p>To resolve any issue related to how one can use the model, the user can refer to the manual that is present in the <strong>Help</strong> tab in the navigation bar.</p>
+<p>To resolve any issue related to how one can use the utility, the user can refer to the manual that is present in the <strong>Help</strong> tab in the navigation bar.</p>
+<p>To get information about the code the user simply has to search the function name in the manual present <a href="">here</a> file to get details about the function or python script file.</p>
 <h2 id="author-and-license">Author and License</h2>
 <p>Copyright © 2021 Joel Kundu</p>
 <p>This program is free software: you can redistribute it and/or modify<br>
@@ -152,9 +209,217 @@ GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
 <h2 id="contact">Contact</h2>
 <p>The author can be contacted via the following emails:</p>
+<h1 id="moulding-machine-parameter-predictor-1">Moulding Machine Parameter Predictor</h1>
+<h2 id="table-of-contents-1">Table of Contents</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#download">Download</a></li>
+<li><a href="#installation">Installation</a>
 <ul>
-<li><a href="mailto:f20171399@hyderabad.bits-pilani.ac.in">f20171399@hyderabad.bits-pilani.ac.in</a></li>
-<li><a href="mailto:jdevcode02@gmail.com">jdevcode02@gmail.com</a></li>
+<li><a href="#to-run-as-a-desktop-app">As a Desktop App</a></li>
+<li><a href="#to-run-as-a-web-app">As a Web App</a></li>
+</ul>
+</li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#finding-optimal-machine-parameters-parameters">Finding optimal machine parameters parameters</a></li>
+<li><a href="#managing-the-database">Managing the database</a>
+<ul>
+<li><a href="#adding-a-single-new-entry-to-the-database">Adding a single new entry to the database</a></li>
+<li><a href="#adding-data-entries-from-a-csv-file">Adding data entries from a csv file</a></li>
+<li><a href="#deleting-one-entry-from-the-database">Deleting one entry from the database</a></li>
+<li><a href="#deleting-the-entire-database">Deleting the entire database</a></li>
+<li><a href="#export-entire-database-as-a-csv">Export entire database as a CSV</a></li>
+<li><a href="#export-csv-format-to-add-data-to-the-database">Export CSV Format to add data to the database</a></li>
+</ul>
+</li>
+<li><a href="#managing-the-artificial-neural-network">Managing the Artificial Neural Network</a>
+<ul>
+<li><a href="#understanding-the-performance-of-the-ann">Understanding the performance of the ANN</a></li>
+<li><a href="#retrain-the-model">Retrain the model</a></li>
+<li><a href="#hypertuning-the-model">HyperTuning the Model</a></li>
+</ul>
+</li>
+<li><a href="#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li><a href="#author-and-license">Author and License</a></li>
+<li><a href="#contact">Contact</a></li>
+</ol>
+<h2 id="introduction-1">Introduction</h2>
+<p>Injection moulding is the most popular and widely used manufacturing process for the mass production of plastic products. In the process, a polymer is melted by electric and frictional heat and is injected into a metal mould under high pressure. The quality of the part produced is greatly influenced by process conditions. These process conditions can be changed by changing the machine parameters and is usually done by an experienced engineer. Whenever a new mould is created an engineer will experimentally determine the optimal parameters via repeated trials and visual inspection of the created product. This method is necessary as there is no theoretical method to predict the quality of the part produced given a set of machine parameters. This makes the process highly dependant on the knowledge and experience of the engineer which makes it hard to transfer the skill to a new operator. Wastage in the form of defective products, machine downtime, labour and energy also happen due to the experimental method. Another alternative to the experimental method is simulations. However, simulations are slow and computationally expensive.</p>
+<p>Machine learning is a subset of artificial intelligence and is the area of computational science that focuses on analysing and interpreting pattern and structures in data to enable learning, reasoning and decision making outside of human interaction. Machine learning allows the user to feed a computer algorithm with a lot of data and have the computer analyse and make data-driven recommendations and decisions based on only the input data. Leveraging these benefits of machine learning, the author is designing a utility that can predict the optimal machine parameters as an output while taking mould geometry details, raw material properties and known process parameters as the inputs.</p>
+<p>This utility will attempt to eliminate the experimental method currently being used. It will reduce the wastage and costs associated with the experimental method. This method will also be faster than both the experimental and simulation method. Also, the intuitive nature of the process will be eliminated allowing for less trained staff to easily control the machines.</p>
+<p>This utility uses an Artificial Neural Network (ANN), that has been already trained on a mix of real and simulated data. The trained ANN predicts the weight of the final part produced based on a set of machine parameters given as input. To find the optimal machine parameters, the utility first finds the actual weight of the part by multiplying the mould volume and raw material’s density. Then the ANN cycles through all the possible machine parameters in a predefined range, predicting the part weight for each combination. The utility then outputs the optimal combination for which the predicted weight is greater or equal to the actual weight of the part.</p>
+<h2 id="prerequisites-1">Prerequisites</h2>
+<p>The user requires <strong>Python3</strong> to be already installed on their systems to use this utility.</p>
+<h4 id="on-windows-2">ON WINDOWS</h4>
+<p>To install python3 on windows, the user can get the installer from <a href="https://www.python.org/downloads/">here</a>.</p>
+<h4 id="on-linux-2">ON LINUX</h4>
+<p>To install python3 on Linux, the user can run the following command in the terminal</p>
+<pre><code>sudo apt-get update
+sudo apt-get install python3
+</code></pre>
+<h4 id="other-dependencies-1">Other Dependencies</h4>
+<p>The user can then manually install the dependencies of the project using the commands given below. Alternatively, they can run the get-dependencies.bat ( on Windows ) or <a href="http://get-dependencies.sh">get-dependencies.sh</a> ( on Linux ) to install the dependencies.</p>
+<pre><code>pip install flask
+pip install flask-sqlalchemy
+pip install flask-wtf
+pip install wtforms
+pip install pyfladesk
+pip install sklearn
+pip install numpy
+pip install pandas
+pip install joblib
+</code></pre>
+<h2 id="download-1">Download</h2>
+<h5 id="option-1--1">Option 1 :</h5>
+<p>Users can download the archive from <a href="https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip">here</a>.</p>
+<h5 id="option-2-1">Option 2:</h5>
+<p>Users can clone this repository using <strong>git</strong>, using the following commands.</p>
+<pre><code>git clone https://github.com/JOELKUNDU/MouldPredictor.git
+cd MouldPredictor
+</code></pre>
+<h2 id="installation-1">Installation</h2>
+<p>The user has to first extract the .zip archive that he has downloaded.</p>
+<h4 id="to-run-as-a-desktop-app-1">TO RUN AS A DESKTOP APP</h4>
+<h5 id="on-windows-3">ON WINDOWS</h5>
+<p>To run the utility on Windows, the user needs to run <strong>Predictor.exe</strong></p>
+<h5 id="on-linux-3">ON LINUX</h5>
+<p>To run the utility on Linux as a desktop app, the user can use the following command in the terminal ( in the directory )</p>
+<pre><code>make
+</code></pre>
+<p>This will make an executable with the name <strong>Predictor-linux</strong> which the user can then run.</p>
+<h4 id="to-run-as-a-web-app-1">TO RUN AS A WEB APP</h4>
+<p>The utility can be used as a desktop app or it can also be used as a web app hosted on a server.<br>
+To host the utility on a server, the user has to follow the following steps.</p>
+<ul>
+<li>The user has to install gunicorn with the command given below.<pre><code>pip install gunicorn
+</code></pre>
+</li>
+<li>Make sure all the dependencies are present. If not please refer to the dependencies section</li>
+<li>The user has to then open the terminal in the directory where the utility is saved and run the following command.<pre><code>gunicorn -w 4 -b 127.0.0.1:5000 run_server:app
+</code></pre>
+</li>
+<li>The web app would be hosted on <strong>https://{ip address of the server}/5000/</strong></li>
+</ul>
+<h2 id="usage-1">Usage</h2>
+<h3 id="finding-optimal-machine-parameters-parameters-1">Finding optimal machine parameters parameters</h3>
+<p>To find the optimal machine parameter the user has to do the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Predict</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to fill the <strong>Predict Form</strong></li>
+<li>The user has to click on the <strong>Predict</strong> button at the bottom of the <strong>Predict Form</strong></li>
+<li>The output would be shown on the right pane under the <strong>Output</strong> section.</li>
+</ul>
+<h3 id="managing-the-database-1">Managing the database</h3>
+<h4 id="adding-a-single-new-entry-to-the-database-1">Adding a single new entry to the database</h4>
+<p>It is recommended that the users regularly add new data into the database to improve the performance of the utility. To add a single new entry into the database the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user then has to then fill the form with the title <strong>" Fill this form to add a new entry in the database "</strong></li>
+<li>The user has to click on the <strong>ADD</strong> button at the bottom of the form.</li>
+<li>The new entry would be the last in the database.</li>
+</ul>
+<h4 id="adding-data-entries-from-a-csv-file-1">Adding data entries from a csv file</h4>
+<p>Before adding data from a CSV file, the user must ensure that <strong>the columns in the csv file match the order of columns as shown in the database</strong> displayed in the <strong>Database</strong> tab.<br>
+To add data entries via a csv file the users have to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to click on <strong>Choose file</strong> and then select the file in the dialog box that will open.</li>
+<li>The user has to then click on the <strong>ADD</strong> button below the text field.</li>
+<li>The new entries will be appended to the existing database.</li>
+</ul>
+<h4 id="deleting-one-entry-from-the-database-1">Deleting one entry from the database</h4>
+<p>To delete one specific entry from the database the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down and find the entry he wishes to delete.</li>
+<li>The user can delete that specific entry by clicking on the delete button present on the right end of that row.</li>
+</ul>
+<h4 id="deleting-the-entire-database-1">Deleting the entire database</h4>
+<p>It is recommended that the user exports the entire database before deleting it. To delete the entire database the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down to the bottom of the screen.</li>
+<li>The user has to then click on the red button labelled <strong>WARNING: DELETE ENTIRE DATABASE</strong></li>
+<li>The entire database will be deleted</li>
+</ul>
+<h4 id="export-entire-database-as-a-csv-1">Export entire database as a CSV</h4>
+<p>To export the entire database as a CSV, the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down to the bottom of the screen.</li>
+<li>The user has to click on the green button labelled <strong>EXPORT DATABASE AS CSV</strong></li>
+<li>The entire database will be exported as a database.csv file on the desktop<br>
+NOTE: Please ensure there is no database.csv file on the desktop else the function will fail.</li>
+<li>If the application is being used as a web app then the file will simply be downloaded on the client system.</li>
+</ul>
+<h4 id="export-csv-format-to-add-data-to-the-database-1">Export CSV Format to add data to the database</h4>
+<p>To export the CSV format that the user can use to input data to the dataset the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Database</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to click on the <strong>GET CSV FORMAT</strong> button on the right of the add data via csv form.</li>
+<li>Format.csv file will be placed on the user’s desktop.<br>
+NOTE Please ensure there is no Format.csv file on the desktop else the function will fail.</li>
+<li>If the application is being used as a web app then the file will simply be downloaded on the client system.</li>
+</ul>
+<h3 id="managing-the-artificial-neural-network-1">Managing the Artificial Neural Network</h3>
+<h4 id="understanding-the-performance-of-the-ann-1">Understanding the performance of the ANN</h4>
+<p>To view the performance of the ANN, the user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen. When the screen loads, The user would be presented with a scatter plot ( Predicted weights vs Actual Weights ). The closer the scatters are to the diagonal of the chart, the better is the performance of the model. Below the plot, three performance metrics are shown.</p>
+<ul>
+<li>Absolute Mean Error ( lower the better )</li>
+<li>Maximum Error ( lower the better )</li>
+<li>Model Performance Score ( higher the better )</li>
+</ul>
+<p>The performance of the model can be increased by regularly retraining the ANN on the expanding database.<br>
+The performance of the model can also be increased by occasionally hypertunning the model. However significant improvement might not happen after the first few uses of this tool</p>
+<h4 id="retrain-the-model-1">Retrain the model</h4>
+<p>Retraining the model allows the ANN to improve its performance by learning from the new data added to the database. To retrain the ANN the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down to the bottom of the screen.</li>
+<li>The user has to click on the button labelled <strong>Retrain the model</strong></li>
+<li>This user can observe the process happening in the terminal window that opens along with the utility</li>
+<li><strong>NOTE</strong>: This process will take time.</li>
+</ul>
+<h4 id="hypertuning-the-model-1">HyperTuning the Model</h4>
+<p>Hyper-Parameter tuning allows the model to tweak its setting automatically to better perform on the given dataset. This utility is fully automatic and requires no input from the user. To HyperTune the model, the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down to the bottom of the screen.</li>
+<li>
+<ul>
+<li>The user has to click on the button labelled <strong>Auto-HyperTune the model</strong></li>
+</ul>
+</li>
+<li>This user can observe the process happening in the terminal window that opens along with the utility</li>
+<li><strong>NOTE</strong>: This process will take time.</li>
+</ul>
+<h3 id="getting-help-1">Getting Help</h3>
+<p>To resolve any issue related to how one can use the utility, the user can refer to the manual that is present in the <strong>Help</strong> tab in the navigation bar.</p>
+<p>To get information about the code the user simply has to search the function name in the manual present <a href="{{ url_for( 'documentation' ) }}">here</a> file to get details about the function or python script file.</p>
+<h2 id="author-and-license-1">Author and License</h2>
+<p>Copyright © 2021 Joel Kundu</p>
+<p>This program is free software: you can redistribute it and/or modify<br>
+it under the terms of the GNU General Public License as published by<br>
+the Free Software Foundation, either version 3 of the License, or<br>
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,<br>
+but WITHOUT ANY WARRANTY; without even the implied warranty of<br>
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br>
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+<h2 id="contact-1">Contact</h2>
+<p>The author can be contacted via the following emails:</p>
+<ul>
+<li>
+<p><a href="mailto:f20171399@hyderabad.bits-pilani.ac.in">f20171399@hyderabad.bits-pilani.ac.in</a></p>
+</li>
+<li>
+<p><a href="mailto:jdevcode02@gmail.com">jdevcode02@gmail.com</a></p>
+</li>
 </ul>
 </div>
 {% endblock %}

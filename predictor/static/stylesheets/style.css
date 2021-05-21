@@ -121,6 +121,17 @@ a{
 	overflow-y: auto;
 }
 
+.page-body2 {
+	box-sizing: border-box;
+	margin: 50px;
+	padding: 30px;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	overflow-y: auto;
+	overflow-x: ;
+}
+
 .Title-text {
 	text-align: center;
 }
@@ -130,6 +141,7 @@ a{
 	padding-right: 15%;
 	text-align: justify;
 }
+
 
 .break {
 	flex-basis: 100%;
@@ -141,13 +153,16 @@ h1 {
 }
 
 pre{
+    width: 85%;
     padding:10px;
     margin:10px;
     background-color: #565656;
     border: 1px dotted #363636;
+    overflow: auto;
 }
 code{
     font-size: 1.2em;
+    overflow : auto;
 }
 
 .dark1 {
