@@ -38,8 +38,10 @@
 	- [get-dependencies.bat](#batch-script-get-dependencies-.bat)
 	- [get-dependencies.sh](#shell-script-get-dependencies-.sh)
 	- [source.cpp](#c-file-source.cpp)
-8.	[Author and License](#author-and-license)
-9.	[Contact](#contact)
+7.	[Author and License](#author-and-license)
+8.	[Contact](#contact)
+
+___
 ## Introduction
 Injection moulding is the most popular and widely used manufacturing process for the mass production of plastic products. In the process, a polymer is melted by electric and frictional heat and is injected into a metal mould under high pressure. The quality of the part produced is greatly influenced by process conditions. These process conditions can be changed by changing the machine parameters and is usually done by an experienced engineer. Whenever a new mould is created an engineer will experimentally determine the optimal parameters via repeated trials and visual inspection of the created product. This method is necessary as there is no theoretical method to predict the quality of the part produced given a set of machine parameters. This makes the process highly dependant on the knowledge and experience of the engineer which makes it hard to transfer the skill to a new operator. Wastage in the form of defective products, machine downtime, labour and energy also happen due to the experimental method. Another alternative to the experimental method is simulations. However, simulations are slow and computationally expensive.
 
