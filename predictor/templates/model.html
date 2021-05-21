@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+Model Information
+{% endblock %}
+{% block content %}
+<div>
+	<section class="banner-body dark2">
+		<div class="Title-text">
+			<h1>Model Management</h1>
+			<p>
+				This page allows you to manage the Artificial Neural Network.<br>
+				You can refer <a href="{{ url_for( 'help_page' ) }}" class="text-link"> Help </a> for more information
+			</p>
+		</div>
+	</section>
+    <section class="page-body dark2">
+        <div>
+            <div class="Title-text">
+                <h2>Current performance of the model</h2>
+            </div>
+            <p class="para-text">
+                The graph shown below represents the current performance of the model. Closer the blue dots are the the
+                diagonal of the graph passing through origin the better is the performance of the model.
+            </p>
+            <br>
+            <div class="Title-text"><img src="{{ url_for('static', filename='ML/performance.png') }}"></div>
+            <br>
+            <div class="Title-text">
+                <h3>Absolute Mean Error: </h3>{{ absMeanError }} grams
+                <h3>Maximum Error: </h3>{{ maxError }} grams
+				<h3>Model Score: </h3> {{ modelScore }}
+            </div>
+        </div>
+    </section>
+    <section class="form-body dark2">
+		<div class="form-div2">
+			<form method="POST" class="form">
+				{{RetrainModel.hidden_tag()}}
+				<div class="Title-text">
+					<h3>Retrain the ML model</h3>
+                    <h5>NOTE: This might take a very long time</h5>
+				</div>
+				<div class="form-row2">
+					<input id="Retrain-model" name="Retrain-model" type="hidden" value="True"> {{ RetrainModel.submit(class = "normal-btn") }}
+				</div>
+			</form>
+		</div>
+        <div class="form-div2">
+			<form method="POST" class="form">
+				{{HyperTuneModel.hidden_tag()}}
+				<div class="Title-text">
+					<h3>Auto HyperTune the ML model</h3>
+                    <h5>NOTE: This might take a very long time</h5>
+				</div>
+				<div class="form-row2">
+					<input id="HyperTune-model" name="HyperTune-model" type="hidden" value="True"> {{ HyperTuneModel.submit(class = "normal-btn") }}
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+{% endblock %}

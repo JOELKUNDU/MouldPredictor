@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title> {% block title %} {% endblock %} </title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}"> </head>
+<body>
+	<nav>
+		<ul>
+			<li>
+				<a href="{{ url_for( 'main_page' ) }}">
+					<button class="normal-btn"> Home </button>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for( 'predict_page' ) }}">
+					<button class="normal-btn"> Predict </button>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for( 'model_page' ) }}">
+					<button class="normal-btn"> Model </button>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for( 'database_page' ) }}">
+					<button class="normal-btn"> Database </button>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for( 'help_page' ) }}">
+					<button class="normal-btn"> Help </button>
+				</a>
+			</li>
+		</ul>
+	</nav>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+		<ul class=flashes>
+		{% for category, message in messages %}
+		<div class="alert-body">
+			<div class="alert {{ category }}">
+			<input type="checkbox" id="alert1">
+			<label class="close" title="close" for="alert1">
+			  <i class="icon-remove"></i>
+			</label>
+				<p class="inner">
+					<strong>ALERT: </strong> {{ message }}
+				</p>
+		  </div>
+		</div>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+	<section class="main-body"> {% block content %} {% endblock %} </section>
+</body>
+</html>

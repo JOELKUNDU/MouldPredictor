@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block title %} Main page {% endblock %} {% block content %}
+<div>
+	<section class="page-body dark2">
+		<div class="Title-text">
+			<h1>Predictor for Machine Parameters <br> for <br> Injection Moulding Parameters.</h1> </div>
+		<div class="para-text">
+			<p>
+
+			</p>
+		</div>
+		<div class="para-text" style="text-align:center;">
+			<h3> Please follow the following steps to make predictions using the utility.
+			</h3>
+			<p> &nbsp;1. Open the predict tab from the navigation bar above.
+			</p>
+			<p> &nbsp;2. Fill the form that shows up on the screen.
+			</p>
+			<p> &nbsp;3. Click on the 'Predict' button.
+			</p>
+			<p> &nbsp;4. The predicted values will be shown in the output section.
+			</p>
+			<br>
+			<br>
+			<a href="{{ url_for( 'predict_page' ) }}" >
+					<button class="normal-btn" style="width:512px;"> Make a Prediction </button>
+			</a>
+		</div>
+	</section>
+</div> {% endblock %}

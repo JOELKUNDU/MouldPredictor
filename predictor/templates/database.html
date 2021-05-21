@@ -1,0 +1,183 @@
+{% extends 'base.html' %} {% block title %} Database Information {% endblock %} {% block content %}
+<div>
+	<section class="banner-body dark2">
+		<div class="Title-text">
+			<h1>Database Management</h1>
+
+			<p>
+				This page allows you to manage the database on which the ANN is trained on.<br>
+				You can refer <a href="{{ url_for( 'help_page' ) }}" class="text-link"> Help </a> for more information
+			</p>
+		</div>
+	</section>
+	<section class="form-body dark2">
+		<div class="form-div">
+			<form method="POST" class="form"> {{ AddEntryForm.hidden_tag() }}
+				<h3>Fill this form to add a new entry in the database</h3>
+				<div class="form-block">
+					<div class="form-row"> Fill Time {{ AddEntryForm.Fill_time(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Injection Pressure {{ AddEntryForm.Injection_pres(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Holding Pressure {{ AddEntryForm.Holding_pres(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Holding Time {{ AddEntryForm.Holding_time(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Cooling Time {{ AddEntryForm.Cooling_time(class = "form-input") }} </div>
+				</div>
+
+
+				<div class="form-block">
+					<div class="form-row"> Mould Temperature {{ AddEntryForm.Mould_temp(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Clamp Force {{ AddEntryForm.Clamp_force(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Shot Weight {{ AddEntryForm.Shot_Weight(class = "form-input") }} </div>
+				</div>
+
+
+				<div class="form-block">
+					<div class="form-row"> Mould Volume {{ AddEntryForm.Mould_vol(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Mould Surface Area {{ AddEntryForm.Mould_SA(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Cavity Volume {{ AddEntryForm.Cavity_vol(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Cavity Surface Area {{ AddEntryForm.Cavity_SA(class = "form-input") }} </div>
+				</div>
+
+
+
+				<div class="form-block">
+					<div class="form-row"> Material Density {{ AddEntryForm.Mat_density(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Material Melt Temperature {{ AddEntryForm.Melt_temp(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Material Glass % {{ AddEntryForm.Mat_GF(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Material Melt Mass FLow Rate {{ AddEntryForm.Mat_MMFR(class = "form-input") }} </div>
+				</div>
+				<div class="form-block">
+					<div class="form-row"> Part Weight {{ AddEntryForm.Part_weight(class = "form-input") }} </div>
+				</div>
+				<br> {{ AddEntryForm.submit(class="normal-btn") }} </form>
+		</div>
+		<div class="form-div">
+			<form method="POST" class="form" enctype="multipart/form-data">
+				<div>
+					{{ AddEntryCSV.hidden_tag() }}
+				<h3>Upload CSV file with data</h3>
+				<div class="form-row"> CSV file path
+				{{ AddEntryCSV.file( class = "form-input-file" ) }} </div>
+				<div class="form-row2"> {{ AddEntryCSV.submit(class = "normal-btn") }} </div>
+				</div>
+			</form>
+			<form method="POST" class="form">
+					{{ GetCSVFormatForm.hidden_tag() }}
+				<h5>To get the CSV format to add data<br> click the button below.</h5>
+				<div class="form-row2">
+					<input id="Get-CSV" name="Get-CSV" type="hidden" value="True"> {{ GetCSVFormatForm.submit(class = "normal-btn") }}
+				</div>
+			</form>
+		</div>
+	</section>
+	<section class="page-body dark2">
+		<div class="Title-text">
+			<h3>
+                Current Database
+            </h3> </div>
+		<p class="para-text"> </p>
+		<div class="table-body">
+			<table class="table1 table-dark">
+				<thead>
+					<tr>
+						<th scope="col">SNo.</th>
+						<th scope="col">Fill Time</th>
+						<th scope="col">Injection Pressure</th>
+						<th scope="col">Holding Pressure</th>
+						<th scope="col">Holding Time</th>
+						<th scope="col">Cooling Time</th>
+						<th scope="col">Mould Temperature</th>
+						<th scope="col">Clamp Force</th>
+						<th scope="col">Shot Weight</th>
+						<th scope="col">Mould Volume</th>
+						<th scope="col">Mould Surface Area</th>
+						<th scope="col">Cavity Volume</th>
+						<th scope="col">Cavity Surface Area</th>
+						<th scope="col">Material Melt Temperature</th>
+						<th scope="col">Material Density</th>
+						<th scope="col">Material Glass %</th>
+						<th scope="col">Material Melt Mass Flow Rate</th>
+						<th scope="col">Part Weight</th>
+						<th scope="col">Delete?</th>
+					</tr>
+				</thead>
+				<tbody> {% for entry in entries %}
+					<tr>
+						<td>{{ entry.id }}</td>
+						<td>{{ entry.fill_time }}</td>
+						<td>{{ entry.injection_pres }}</td>
+						<td>{{ entry.holding_pres }}</td>
+						<td>{{ entry.holding_time }}</td>
+						<td>{{ entry.cooling_time }}</td>
+						<td>{{ entry.mould_temp }}</td>
+						<td>{{ entry.clamp_force }}</td>
+						<td>{{ entry.shot_weight }}</td>
+						<td>{{ entry.mould_SA }}</td>
+						<td>{{ entry.mould_vol }}</td>
+						<td>{{ entry.cavity_SA }}</td>
+						<td>{{ entry.cavity_vol }}</td>
+						<td>{{ entry.melt_temp }}</td>
+						<td>{{ entry.mat_density }}</td>
+						<td>{{ entry.mat_GF }}</td>
+						<td>{{ entry.mat_MMFR }}</td>
+
+						<td>{{ entry.part_weight }}</td>
+
+						<td>
+							<form method="POST"> {{ DeleteEntryForm.hidden_tag() }}
+								<input id="deleted_entry" name="deleted_entry" type="hidden" value="{{entry.id}}"> {{ DeleteEntryForm.submit(class="red-btn2") }} </form>
+						</td>
+					</tr> {% endfor %} </tbody>
+			</table>
+		</div>
+	</section>
+	<section class="form-body dark2">
+		<div class="form-div2">
+			<form method="POST" class="form">
+				{{ExportAllEntries.hidden_tag()}}
+				<div class="Title-text">
+					<h3>Export Database as CSV file</h3>
+				</div>
+				<div class="form-row2">
+					<input id="Export-DB" name="Export-DB" type="hidden" value="True"> {{ ExportAllEntries.submit(class = "green-btn") }}
+				</div>
+				<h5>NOTE: The file will be saved on the desktop as database.csv</h5>
+			</form>
+		</div>
+		<div class="form-div2">
+			<form method="POST" class="form">
+				{{DeleteAllEntries.hidden_tag()}}
+				<div class="Title-text">
+					<h3>Delete the entire Database</h3>
+				</div>
+				<div class="form-row2">
+					<input id="Purge-DB" name="Purge-DB" type="hidden" value="True"> {{ DeleteAllEntries.submit(class = "red-btn") }}
+				</div>
+				<h5>NOTE: Please export the Database first if you require a record of it as this process is irreversible.</h5>
+			</form>
+		</div>
+	</section>
+</div> {% endblock %}

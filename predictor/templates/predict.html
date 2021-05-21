@@ -1,0 +1,98 @@
+{% extends 'base.html' %} {% block title %} Prediction Page {% endblock %} {% block content %}
+<div>
+	<section class="banner-body dark2">
+		<div class="Title-text">
+			<h1>Prediction Page</h1>
+			<p>
+				This page allows you predict optimal machine parameters.2<br>
+				You can refer <a href="{{ url_for( 'help_page' ) }}" class="text-link"> Help </a> for more information
+			</p>
+		</div>
+	</section>
+	<section class="form-body dark2">
+		<div class="form-div">
+			<form method="post" class="form"> {{ form.hidden_tag() }}
+				<h2>Predict Form</h2>
+				<h3>Fill the form below to get the predict optimal machine parameters</h3>
+				<h3>PART 1 Process Parameters</h3>
+				<div class="form-block">
+                    <div class="form-row">Fill Time (in seconds)</div>
+					<div class="form-row"> Minimum Value {{ form.Fill_time_min(class = "form-input") }} </div>
+					<div class="form-row"> Maximum Value {{ form.Fill_time_max(class = "form-input") }} </div>
+					<div class="form-row"> Resolution {{ form.Fill_time_res(class = "form-input") }} </div>
+				</div>
+				<br>
+				<div class="form-block">
+                    <div class="form-row"> Injection Pressure (in MPa)</div>
+					<div class="form-row"> Minimum Value {{ form.Injection_pres_min(class = "form-input") }} </div>
+					<div class="form-row"> Maximum Value {{ form.Injection_pres_max(class = "form-input") }} </div>
+					<div class="form-row"> Resolution {{ form.Injection_pres_res(class = "form-input") }} </div>
+				</div>
+				<br>
+				<div class="form-block">
+                    <div class="form-row"> Holding Pressure (in MPa)</div>
+					<div class="form-row"> Minimum Value {{ form.Holding_pres_min(class = "form-input") }} </div>
+					<div class="form-row"> Maximum Value {{ form.Holding_pres_max(class = "form-input") }} </div>
+					<div class="form-row"> Resolution {{ form.Holding_pres_res(class = "form-input") }} </div>
+				</div>
+				<br>
+				<div class="form-block">
+                    <div class="form-row"> Holding Time (in seconds)</div>
+					<div class="form-row"> Minimum Value {{ form.Holding_time_min(class = "form-input") }} </div>
+					<div class="form-row"> Maximum Value {{ form.Holding_time_max(class = "form-input") }} </div>
+					<div class="form-row"> Resolution {{ form.Holding_time_res(class = "form-input") }} </div>
+				</div>
+				<br>
+				<div class="form-block">
+                    <div class="form-row"> Cooling Time (in seconds)</div>
+					<div class="form-row"> Minimum Value {{ form.Cooling_time_min(class = "form-input") }} </div>
+					<div class="form-row"> Maximum Value {{ form.Cooling_time_max(class = "form-input") }} </div>
+					<div class="form-row"> Resolution {{ form.Cooling_time_res(class = "form-input") }} </div>
+				</div>
+				<br>
+				<h3>PART 2 Machine Details</h3>
+				<div class="form-block">
+					<div class="form-row"> Mould temperature in deg C {{ form.Mould_temp(class = "form-input") }} </div>
+					<div class="form-row"> Clamp force of the machine in Tonnes {{ form.Clamp_force(class = "form-input") }} </div>
+					<div class="form-row"> Shot Weight {{ form.Shot_Weight(class = "form-input") }} </div>
+				</div>
+				<br>
+				<h3>PART 3 Mould Details</h3>
+				<div class="form-block">
+					<div class="form-row"> Total Mould Surface Area in cm2 {{ form.Mould_SA(class = "form-input") }} </div>
+					<div class="form-row"> Total Mould Volume in cm3 {{ form.Mould_vol(class = "form-input") }} </div>
+					<div class="form-row"> Cavity Surface Area in cm2{{ form.Cavity_SA(class = "form-input") }} </div>
+					<div class="form-row"> Cavity Volume in cm3{{ form.Cavity_vol(class = "form-input") }} </div>
+				</div>
+				<br>
+				<h3>PART 4 Mould Details</h3>
+				<div class="form-block">
+					<div class="form-row"> Material Melt Temperature in deg C {{ form.Melt_temp(class = "form-input") }} </div>
+					<div class="form-row"> Material Density in g/cm3 {{ form.Mat_density(class = "form-input") }} </div>
+					<div class="form-row"> Material Glass % {{ form.Mat_GF(class = "form-input") }} </div>
+					<div class="form-row"> Material Melt Mass Flow Rate {{ form.Mat_MMFR(class = "form-input") }} </div>
+				</div>
+				<br> {{ form.submit(class="normal-btn") }} </form>
+		</div>
+		<div class="output-div" style="text-align:center">
+			<section class="output">
+				<div class="Title-text">
+					<h2>Output</h2></div>
+				<h3>The predicted optimal values.</h3>
+				<br>
+				<div>Fill Time: {{ output[0] }} Sec</div>
+				<div>Injection Pressure: {{ output[1] }} MPa</div>
+				<div>Holding Pressure: {{ output[2] }} MPa</div>
+				<div>Holding Time: {{ output[3] }} Sec</div>
+				<div>Cooling Time: {{ output[4] }} Sec</div>
+				<br>
+				<div>Predicted Weight: {{ output[8] }} grams</div>
+				<div>Actual Weight: {{ output[9] }} grams</div>
+				<br>
+				<a href="{{ url_for('predict_page') }}">
+					<button class="normal-btn">Predict Again</button>
+				</a>
+			</section>
+		</div>
+	</section>
+</div> {% endblock %}
