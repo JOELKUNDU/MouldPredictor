@@ -80,6 +80,10 @@ To host the utility on a server, the user has to follow the following steps.
 	```
 	gunicorn -w 4 -b 127.0.0.1:5000 run-server:app
 	``` 
+    or
+  ```
+    bash server.sh
+  ```
 - The web app would be hosted on **https://{ip address of the server}/5000/**
 - To stop the server , the user can run the following comand.
 	```
