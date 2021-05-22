@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+import json
 
 
 class AppState(object):
@@ -26,11 +27,18 @@ state = AppState()
 modulePath = os.path.abspath(__name__)
 csvPath = 'static/client/csv/'
 uploadPath = 'uploads/'
-clientUploadPath = os.path.normpath(os.path.join(modulePath,uploadPath))
+clientUploadPath = os.path.normpath(os.path.join(modulePath, uploadPath))
 clientCSVPath = os.path.normpath(os.path.join(modulePath, csvPath))
 
 
 app = Flask(__name__)
+configPath = os.path.join(app.root_path, 'config.json')
+config = open(configPath)
+data = json.load(config)
+if data["ServerMode"] == "True":
+    print(" * Running in SERVER MODE")
+    state.serverModeOn()
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SECRET_KEY'] = '9a257ea9a3b0b646c25ec6f8'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True

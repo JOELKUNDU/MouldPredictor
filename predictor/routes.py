@@ -7,6 +7,7 @@ from predictor.models import Mould
 import predictor.machine_learning as ml
 import numpy as np
 from werkzeug.utils import secure_filename
+import os
 
 
 @app.route('/')
@@ -151,8 +152,8 @@ def database_page():
         # add entry logic with csv
         if addentrycsv.validate_on_submit():
             filename = secure_filename(addentrycsv.file.data.filename)
-            addentrycsv.file.data.save(app.config['UPLOADS'] + filename)
-            add_from_csv(app.config['UPLOADS'] + filename)
+            addentrycsv.file.data.save(os.path.join(app.config['UPLOADS'], filename))
+            add_from_csv(os.path.join(app.config['UPLOADS'], filename))
             flash('CSV dataset added successfully', 'success')
             return redirect(url_for('database_page'))
 
@@ -231,9 +232,6 @@ def database_page():
 def help_page():
     return render_template('help.html')
 
-@app.route('/documentation')
-def documentation():
-    return render_template('doc.html')
 
 
 

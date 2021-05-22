@@ -4,7 +4,6 @@ pip install flask-wtf
 pip install wtforms
 pip install pyfladesk
 pip install sklearn
-pip install tensorflow
 pip install mathplotlib
 pip install numpy
 pip install pandas

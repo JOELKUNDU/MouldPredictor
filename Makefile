@@ -1,9 +1,17 @@
-CC = g++
+OBJS	= source.o
+SOURCE	= source.cpp
+HEADER	= 
+OUT	= Predictor-linux
+CC	 = g++
+FLAGS	 = -g -c -Wall
+LFLAGS	 = 
 
-TARGET = Predictor-linux
+all: $(OBJS)
+	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)
 
-all: $(TARGET)
+source.o: source.cpp
+	$(CC) $(FLAGS) source.cpp -std=c17
 
-$(TARGET): source.cpp
-$(CC) -o $(TARGET) source.cpp
 
+clean:
+	rm -f $(OBJS) $(OUT)

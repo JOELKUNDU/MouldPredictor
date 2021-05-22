@@ -24,25 +24,29 @@ sudo apt-get install python3
 #### Other Dependencies
 The user can then manually install the dependencies of the project using the commands given below. Alternatively, they can run the get-dependencies.bat ( on Windows ) or get-dependencies.sh ( on Linux ) to install the dependencies.
 ```
-pip install flask 
-pip install flask-sqlalchemy
-pip install flask-wtf
-pip install wtforms
-pip install pyfladesk
-pip install sklearn
-pip install numpy
-pip install pandas
+pip install flask   
+pip install flask-sqlalchemy  
+pip install flask-wtf  
+pip install wtforms  
+pip install pyfladesk  
+pip install sklearn  
+pip install mathplotlib  
+pip install numpy  
+pip install pandas  
+pip install os   
+pip install shutil  
 pip install joblib
 ```
 ## Download
-##### Option 1 : 
+-  Option 1 : 
 Users can download the archive from [here](https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip).
- ##### Option 2:
+
+ - Option 2:
  Users can clone this repository using **git**, using the following commands.
-```
-git clone https://github.com/JOELKUNDU/MouldPredictor.git
-cd MouldPredictor
-```
+	```
+	git clone https://github.com/JOELKUNDU/MouldPredictor.git
+	cd MouldPredictor
+	```
 
 
 ## Installation
@@ -57,8 +61,16 @@ make
 ```
 This will make an execuatable with the name **Predictor-linux** which the user can then run.
 
+
 #### TO RUN AS A WEB APP
-The utility can also be used as a web app hosted on a server. To host the utility on a server, the user has to follow the following steps.
+The utility can be used as a desktop app or it can also be used as a web app hosted on a server. 
+To host the utility on a server, the user has to follow the following steps.
+- The user has to edit the **config.json** file in the predictor directory and change the value for ServerMode from False (default) to True (Case-sensitive) 
+	```json
+	{  
+	  "ServerMode" : "True"  
+	}
+	```
 -  The user has to install gunicorn with the command given below.
 	```
 	pip install gunicorn
@@ -66,9 +78,13 @@ The utility can also be used as a web app hosted on a server. To host the utilit
 - Make sure all the dependencies are present. If not please refer to the dependencies section
 - The user has to then open the terminal in the directory where the utility is saved and run the following command.
 	```
-	gunicorn -w 4 -b 127.0.0.1:5000 run_server:app
+	gunicorn -w 4 -b 127.0.0.1:5000 run-server:app
 	``` 
-- The web app would be hosted at **https://{ip address of the server}/5000/**
+- The web app would be hosted on **https://{ip address of the server}/5000/**
+- To stop the server , the user can run the following comand.
+	```
+	 pkill gunicorn
+	 ```
 
 ## Author and License
 Copyright (C) 2021 Joel Kundu

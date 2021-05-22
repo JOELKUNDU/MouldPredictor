@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui, QtWebEngineWidgets
 import socket
 import ctypes
+from sys import platform
 
 
 class ApplicationThread(QtCore.QThread):
@@ -38,7 +39,8 @@ def init_gui(application, port=0, width=800, height=600,
              window_title="title", icon="icon1.ico", argv=None):
 
     myAppID = 'JoelKundu.Predictor'
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myAppID)
+    if platform == "win32":
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myAppID)
 
     if argv is None:
         argv = sys.argv

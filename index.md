@@ -1,4 +1,4 @@
-﻿
+
 # Moulding Machine Parameter Predictor
 ## Table of Contents
 1.	[Introduction](#introduction)
@@ -24,14 +24,14 @@
 6.	[Code Documentation](#code-documentation)
 	- [Technology Documentation](#technology-documentation)	
 	- [predictor/database.py](#python-script--database-.py)
-	- [predictor/forms.py](#python-script--forms-.py)
+	- [predictor/forms.py](#python-script-forms-.py)
 	- [predictor/machine_learning.py](#python-script-machine_learning-.py)
 	- [predictor/model.py](#python-script-models-.py)
 	- [predictor/routes.py](#python-script-routes-.py)
-	- [predictor/ui.py](#python-script-ui-.py)
+	- [predictor/ui.py](#python-script--ui-.py)
 	- [predictor/\_\_init\_\_.py](#python-script-__init__.py)
 	- [run.py](#python-script-run-.py)
-	- [run-server.py](#python-script-runserver-.py)
+	- [run-server.py](#python-script-run-server-.py)
 	- [man-recreatedb.py](#python-script-man-recreatedb-.py)
 	- [man-overfit-test.py](#python-script-man-overfit-test-.py)
 	- [man-hypertune,py](#python-script-man-hypertune-.py)
@@ -42,6 +42,8 @@
 8.	[Contact](#contact)
 
 ___
+
+
 ## Introduction
 Injection moulding is the most popular and widely used manufacturing process for the mass production of plastic products. In the process, a polymer is melted by electric and frictional heat and is injected into a metal mould under high pressure. The quality of the part produced is greatly influenced by process conditions. These process conditions can be changed by changing the machine parameters and is usually done by an experienced engineer. Whenever a new mould is created an engineer will experimentally determine the optimal parameters via repeated trials and visual inspection of the created product. This method is necessary as there is no theoretical method to predict the quality of the part produced given a set of machine parameters. This makes the process highly dependant on the knowledge and experience of the engineer which makes it hard to transfer the skill to a new operator. Wastage in the form of defective products, machine downtime, labour and energy also happen due to the experimental method. Another alternative to the experimental method is simulations. However, simulations are slow and computationally expensive.
 
@@ -65,24 +67,29 @@ sudo apt-get install python3
 #### Other Dependencies
 The user can then manually install the dependencies of the project using the commands given below. Alternatively, they can run the get-dependencies.bat ( on Windows ) or get-dependencies.sh ( on Linux ) to install the dependencies.
 ```
-pip install flask 
-pip install flask-sqlalchemy
-pip install flask-wtf
-pip install wtforms
-pip install sklearn
-pip install numpy
-pip install pandas
+pip install flask   
+pip install flask-sqlalchemy  
+pip install flask-wtf  
+pip install wtforms  
+pip install pyfladesk  
+pip install sklearn  
+pip install mathplotlib  
+pip install numpy  
+pip install pandas  
+pip install os   
+pip install shutil  
 pip install joblib
 ```
 ## Download
-##### Option 1 : 
+-  Option 1 : 
 Users can download the archive from [here](https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip).
- ##### Option 2:
+
+ - Option 2:
  Users can clone this repository using **git**, using the following commands.
-```
-git clone https://github.com/JOELKUNDU/MouldPredictor.git
-cd MouldPredictor
-```
+	```
+	git clone https://github.com/JOELKUNDU/MouldPredictor.git
+	cd MouldPredictor
+	```
 
 
 ## Installation
@@ -100,6 +107,12 @@ This will make an executable with the name **Predictor-linux** which the user ca
 #### TO RUN AS A WEB APP
 The utility can be used as a desktop app or it can also be used as a web app hosted on a server. 
 To host the utility on a server, the user has to follow the following steps.
+- The user has to edit the **config.json** file in the predictor directory and change the value for ServerMode from False (default) to True (Case-sensitive) 
+	```json
+	{  
+	  "ServerMode" : "True"  
+	}
+	```
 -  The user has to install gunicorn with the command given below.
 	```
 	pip install gunicorn
@@ -107,9 +120,13 @@ To host the utility on a server, the user has to follow the following steps.
 - Make sure all the dependencies are present. If not please refer to the dependencies section
 - The user has to then open the terminal in the directory where the utility is saved and run the following command.
 	```
-	gunicorn -w 4 -b 127.0.0.1:5000 run_server:app
+	gunicorn -w 4 -b 127.0.0.1:5000 run-server:app
 	``` 
 - The web app would be hosted on **https://{ip address of the server}/5000/**
+- To stop the server , the user can run the following comand.
+	```
+	 pkill gunicorn
+	 ```
 
 ## Usage
 ### Finding optimal machine parameters parameters
@@ -190,9 +207,7 @@ Hyper-Parameter tuning allows the model to tweak its setting automatically to be
 - **NOTE**: This process will take time.
 
 ### Getting Help
-To resolve any issue related to how one can use the utility, the user can refer to the manual that is present in the **Help** tab in the navigation bar.
-
- To get information about the code the user simply has to search the function name in the manual present [here]() file to get details about the function or python script file.
+To resolve any issue related to how one can use the utility or to get information about the code, the user can refer to the manual that is present in the **Help** tab in the navigation bar. 
 
 ## Code Documentation
 ### Technology Documentation
@@ -267,24 +282,24 @@ def add_from_csv(filepath):
         mat_MMFR = dataframe[i][15]  
         part_weight = dataframe[i][16]  
         entry_to_create = Mould(  
-            fill_time=fill_time,  
-  injection_pres=injection_pres,  
-  holding_pres=holding_pres,  
-  holding_time=holding_time,  
-  cooling_time=cooling_time,  
-  mould_temp=mould_temp,  
-  clamp_force=clamp_force,  
-  shot_weight=shot_weight,  
-  mould_SA=mould_SA,  
-  mould_vol=mould_vol,  
-  cavity_SA=cavity_SA,  
-  cavity_vol=cavity_vol,  
-  melt_temp=melt_temp,  
-  mat_density=mat_density,  
-  mat_GF=mat_GF,  
-  mat_MMFR=mat_MMFR,  
-  part_weight=part_weight,  
-  )  
+								fill_time=fill_time,  
+								injection_pres=injection_pres,  
+								holding_pres=holding_pres,  
+								holding_time=holding_time,  
+								cooling_time=cooling_time,  
+								mould_temp=mould_temp,  
+								clamp_force=clamp_force,  
+								shot_weight=shot_weight,  
+								mould_SA=mould_SA,  
+								mould_vol=mould_vol,  
+								cavity_SA=cavity_SA,  
+								cavity_vol=cavity_vol,  
+								melt_temp=melt_temp,  
+								mat_density=mat_density,  
+								mat_GF=mat_GF,  
+								mat_MMFR=mat_MMFR,  
+								part_weight=part_weight,  
+							  )  
         entry_to_create.add_self()
 ```
 This method takes a string with the file path to the csv file as input and imports the dataset into the database from that .csv file. This method doesn't verify that the columns are in the correct sequence or have valid values. This has to be done by the user beforehand.
@@ -394,7 +409,7 @@ def exportCSV():
         DF = pd.DataFrame(dataframe)  
         DF.to_csv('predictor/uploads/database.csv')  
         source = 'predictor/uploads/database.csv'  
-  shutil.copyfile(source, dest)  
+	    shutil.copyfile(source, dest)  
         return True
 ```
 This method exports the entire dataset in file name database.csv on the user's desktop. 
@@ -425,26 +440,26 @@ def serverExportCSV():
     dataframe = []  
     for entry in entries:  
         data_object = [  
-            entry.fill_time,  
-  entry.injection_pres,  
-  entry.holding_pres,  
-  entry.holding_time,  
-  entry.cooling_time,  
-  
-  entry.mould_temp,  
-  entry.clamp_force,  
-  entry.shot_weight,  
-  
-  entry.mould_SA,  
-  entry.mould_vol,  
-  entry.cavity_SA,  
-  entry.cavity_vol,  
-  
-  entry.melt_temp,  
-  entry.mat_density,  
-  entry.mat_GF,  
-  entry.mat_MMFR,  
-  entry.part_weight  
+			entry.fill_time,  
+			entry.injection_pres,  
+			entry.holding_pres,  
+			entry.holding_time,  
+			entry.cooling_time,  
+
+			entry.mould_temp,  
+			entry.clamp_force,  
+			entry.shot_weight,  
+
+			entry.mould_SA,  
+			entry.mould_vol,  
+			entry.cavity_SA,  
+			entry.cavity_vol,  
+
+			entry.melt_temp,  
+			entry.mat_density,  
+			entry.mat_GF,  
+			entry.mat_MMFR,  
+			entry.part_weight  
         ]  
         dataframe.append(data_object)  
     dataframe = np.array(dataframe)  
@@ -636,32 +651,32 @@ Other methods of the class are described below.
 ```python
 def hyperTune():  
     parameter_space = {  
-        'hidden_layer_sizes': [(50, 50, 50)],  
-  'activation': ['tanh', 'relu', 'logistic', 'identity'],  
-  'solver': ['sgd', 'adam', 'lbfgs'],  
-  'alpha':  [0.001, 0.01, 0.1, 0.0001,  
-  0.002, 0.02, 0.2, 0.0002,  
-  0.003, 0.03, 0.3, 0.0003,  
-  0.004, 0.04, 0.4, 0.0004,  
-  0.005, 0.05, 0.5, 0.0005,  
-  0.006, 0.06, 0.6, 0.0006,  
-  0.007, 0.07, 0.7, 0.0007,  
-  0.008, 0.08, 0.8, 0.0008,  
-  0.009, 0.09, 0.9, 0.0009],  
-  'learning_rate': ['constant', 'adaptive', 'invscaling'],  
-  'learning_rate_init': [0.001, 0.01, 0.1, 0.0001,  
-  0.002, 0.02, 0.2, 0.0002,  
-  0.003, 0.03, 0.3, 0.0003,  
-  0.004, 0.04, 0.4, 0.0004,  
-  0.005, 0.05, 0.5, 0.0005,  
-  0.006, 0.06, 0.6, 0.0006,  
-  0.007, 0.07, 0.7, 0.0007,  
-  0.008, 0.08, 0.8, 0.0008,  
-  0.009, 0.09, 0.9, 0.0009],  
-  'random_state': [1399],  
-  'warm_start': [True],  
-  'max_iter': [100000, 75000, 125000],  
-  'verbose': [True]  
+			'hidden_layer_sizes': [(50, 50, 50)],  
+			'activation': ['tanh', 'relu', 'logistic', 'identity'],  
+			'solver': ['sgd', 'adam', 'lbfgs'],  
+			'alpha':  [0.001, 0.01, 0.1, 0.0001,  
+			0.002, 0.02, 0.2, 0.0002,  
+			0.003, 0.03, 0.3, 0.0003,  
+			0.004, 0.04, 0.4, 0.0004,  
+			0.005, 0.05, 0.5, 0.0005,  
+			0.006, 0.06, 0.6, 0.0006,  
+			0.007, 0.07, 0.7, 0.0007,  
+			0.008, 0.08, 0.8, 0.0008,  
+			0.009, 0.09, 0.9, 0.0009],  
+			'learning_rate': ['constant', 'adaptive', 'invscaling'],  
+			'learning_rate_init': [0.001, 0.01, 0.1, 0.0001,  
+			0.002, 0.02, 0.2, 0.0002,  
+			0.003, 0.03, 0.3, 0.0003,  
+			0.004, 0.04, 0.4, 0.0004,  
+			0.005, 0.05, 0.5, 0.0005,  
+			0.006, 0.06, 0.6, 0.0006,  
+			0.007, 0.07, 0.7, 0.0007,  
+			0.008, 0.08, 0.8, 0.0008,  
+			0.009, 0.09, 0.9, 0.0009],  
+			'random_state': [1399],  
+			'warm_start': [True],  
+			'max_iter': [100000, 75000, 125000],  
+			'verbose': [True]  
     }  
     trained_model = MLPRegressor()  
     X, y = database.get_datasets()  
@@ -714,7 +729,7 @@ def init_load_up():
         plt.ylabel('Predicted Weight')  
         plt.title('Scatter Plot (Actual vs Predicted Part Weight)')  
         # save the plot  
-  plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')  
+    plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')  
     ml_metrics.loadPerformance()
 ```
 This function is executed whenever the utility is loaded and this ensures that the model exists. if not then it calls on the hypertune() function to create an optimized model. It will then measure the model's performance and will save it into the database. This function also creates the scatter plot chart shown in the model tab using the MathPlotLib library.
@@ -757,9 +772,9 @@ def getPredict(Fill_time, Injection_pres, Holding_pres, Holding_time, Cooling_ti
     init_load_up()  
     trained_model = jl.load('predictor/static/ML/config.joblib')  
     X = [[Fill_time, Injection_pres, Holding_pres, Holding_time, Cooling_time,  
-  Mould_temp, Clamp_force, Shot_Weight,  
-  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
-  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
+		  Mould_temp, Clamp_force, Shot_Weight,  
+		  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
+		  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
     pred = trained_model.predict(X)  
     return pred[0]
 ```
@@ -768,7 +783,7 @@ This functions takes the values from the variables in the parameter list, conver
 #### def predict (Fill_time_min, Fill_time_max, Fill_time_res, Injection_pres_min, Injection_pres_max, Injection_pres_res,  Holding_pres_min, Holding_pres_max, Holding_pres_res,  Holding_time_min, Holding_time_max, Holding_time_res,  Cooling_time_min, Cooling_time_max, Cooling_time_res,  Mould_temp, Clamp_force, Shot_Weight,  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  Mat_density, Melt_temp, Mat_GF, Mat_MMFR)
 ```python
 def predict(  
-        Fill_time_min, Fill_time_max, Fill_time_res,  
+  Fill_time_min, Fill_time_max, Fill_time_res,  
   Injection_pres_min, Injection_pres_max, Injection_pres_res,  
   Holding_pres_min, Holding_pres_max, Holding_pres_res,  
   Holding_time_min, Holding_time_max, Holding_time_res,  
@@ -782,16 +797,16 @@ def predict(
     weight_actual = Mould_vol * Mat_density  
     print("\nweight:", weight_actual)  
     first_pred = True  
-  param = []  
+	param = []  
     for ft in range(Fill_time_min, Fill_time_max + 1, Fill_time_res):  
         for ip in range(Injection_pres_min, Injection_pres_max + 1, Injection_pres_res):  
             for hp in range(Holding_pres_min, Holding_pres_max + 1, Holding_pres_res):  
                 for ht in range(Holding_time_min, Holding_time_max + 1, Holding_time_res):  
                     for ct in range(Cooling_time_min, Cooling_time_max + 1, Cooling_time_res):  
                         X = [[ft, ip, hp, ht, ct,  
-  Mould_temp, Clamp_force, Shot_Weight,  
-  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
-  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
+							  Mould_temp, Clamp_force, Shot_Weight,  
+							  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
+							  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
                         pred = trained_model.predict(X)  
                         print("param:", X, "\nPred:", pred, "\nweight:", weight_actual)  
                         if weight_actual <= pred[0] <= weight_actual * 1.01:  
@@ -800,15 +815,15 @@ def predict(
                                 param.append(pred[0])  
                                 param.append(weight_actual)  
                                 break  
- else:  
+					 else:  
                         continue  
- break else:  
+				 break else:  
                     continue  
- break else:  
+			 break else:  
                 continue  
- break else:  
+		 break else:  
             continue  
- break return param
+	 break return param
 ```
 This function takes the values from the variables in the parameter list, then it starts to iterate through all the possible combination of the individual parameters bounded by the upper and lower (minimum and maximum) values that were also passed in as a parameter. The function then passes each iteration through the ANN and verifies if the predicted weight is greater than the value we would get from mould volume x raw material density. If it verifies true then that combination is returned as the optimal set of machine parameters.
 ___
@@ -909,35 +924,35 @@ def predict_page():
     if request.method == 'POST':  
         if predict_form.validate_on_submit():  
             output = ml.predict(  
-                Fill_time_min=predict_form.Fill_time_min.data,  
-  Fill_time_max=predict_form.Fill_time_max.data,  
-  Fill_time_res=predict_form.Fill_time_res.data,  
-  Injection_pres_min=predict_form.Injection_pres_min.data,  
-  Injection_pres_max=predict_form.Injection_pres_max.data,  
-  Injection_pres_res=predict_form.Injection_pres_res.data,  
-  Holding_pres_min=predict_form.Holding_pres_min.data,  
-  Holding_pres_max=predict_form.Holding_pres_max.data,  
-  Holding_pres_res=predict_form.Holding_pres_res.data,  
-  Holding_time_min=predict_form.Holding_time_min.data,  
-  Holding_time_max=predict_form.Holding_time_max.data,  
-  Holding_time_res=predict_form.Holding_time_res.data,  
-  Cooling_time_min=predict_form.Cooling_time_min.data,  
-  Cooling_time_max=predict_form.Cooling_time_max.data,  
-  Cooling_time_res=predict_form.Cooling_time_res.data,  
-  
-  Mould_temp=predict_form.Mould_temp.data,  
-  Clamp_force=predict_form.Clamp_force.data,  
-  Shot_Weight=predict_form.Shot_Weight.data,  
-  
-  Mould_SA=predict_form.Mould_SA.data,  
-  Mould_vol=predict_form.Mould_vol.data,  
-  Cavity_SA=predict_form.Cavity_SA.data,  
-  Cavity_vol=predict_form.Cavity_vol.data,  
-  
-  Melt_temp=predict_form.Melt_temp.data,  
-  Mat_density=predict_form.Mat_density.data,  
-  Mat_GF=predict_form.Mat_GF.data,  
-  Mat_MMFR=predict_form.Mat_MMFR.data  
+				                  Fill_time_min=predict_form.Fill_time_min.data,  
+								  Fill_time_max=predict_form.Fill_time_max.data,  
+								  Fill_time_res=predict_form.Fill_time_res.data,  
+								  Injection_pres_min=predict_form.Injection_pres_min.data,  
+								  Injection_pres_max=predict_form.Injection_pres_max.data,  
+								  Injection_pres_res=predict_form.Injection_pres_res.data,  
+								  Holding_pres_min=predict_form.Holding_pres_min.data,  
+								  Holding_pres_max=predict_form.Holding_pres_max.data,  
+								  Holding_pres_res=predict_form.Holding_pres_res.data,  
+								  Holding_time_min=predict_form.Holding_time_min.data,  
+								  Holding_time_max=predict_form.Holding_time_max.data,  
+								  Holding_time_res=predict_form.Holding_time_res.data,  
+								  Cooling_time_min=predict_form.Cooling_time_min.data,  
+								  Cooling_time_max=predict_form.Cooling_time_max.data,  
+								  Cooling_time_res=predict_form.Cooling_time_res.data,  
+								  
+								  Mould_temp=predict_form.Mould_temp.data,  
+								  Clamp_force=predict_form.Clamp_force.data,  
+								  Shot_Weight=predict_form.Shot_Weight.data,  
+								  
+								  Mould_SA=predict_form.Mould_SA.data,  
+								  Mould_vol=predict_form.Mould_vol.data,  
+								  Cavity_SA=predict_form.Cavity_SA.data,  
+								  Cavity_vol=predict_form.Cavity_vol.data,  
+								  
+								  Melt_temp=predict_form.Melt_temp.data,  
+								  Mat_density=predict_form.Mat_density.data,  
+								  Mat_GF=predict_form.Mat_GF.data,  
+								  Mat_MMFR=predict_form.Mat_MMFR.data  
             )  
             print('Results: ', output)  
             if not output:  
@@ -970,33 +985,34 @@ def model_page():
             ml.retrain()  
             flash('Model Retrained Successfully', 'success')  
             return render_template('model.html',  
-  absMeanError=absMeanError,  
-  modelScore=modelScore,  
-  maxError=maxError,  
-  RetrainModel=retrainmodel,  
-  HyperTuneModel=hypertunemodel)  
+								  absMeanError=absMeanError,  
+								  modelScore=modelScore,  
+								  maxError=maxError,  
+								  RetrainModel=retrainmodel,  
+								  HyperTuneModel=hypertunemodel)  
         retrain = request.form.get('HyperTune-model')  
         if retrain:  
             flash('Model HyperTuned Successfully', 'success')  
             flash('If the model\'s performance has decreased then you need to run the HyperTune utility again', 'info')  
             ml.hyperTune()  
             return render_template('model.html',  
-  absMeanError=absMeanError,  
-  modelScore=modelScore,  
-  maxError=maxError,  
-  RetrainModel=retrainmodel,  
-  HyperTuneModel=hypertunemodel)  
+								  absMeanError=absMeanError,  
+								  modelScore=modelScore,  
+								  maxError=maxError,  
+								  RetrainModel=retrainmodel,  
+								  HyperTuneModel=hypertunemodel)  
     if request.method == 'GET':  
         return render_template('model.html',  
-  absMeanError=absMeanError,  
-  modelScore=modelScore,  
-  maxError=maxError,  
-  RetrainModel=retrainmodel,  
-  HyperTuneModel=hypertunemodel)
+							  absMeanError=absMeanError,  
+							  modelScore=modelScore,  
+							  maxError=maxError,  
+							  RetrainModel=retrainmodel,  
+							  HyperTuneModel=hypertunemodel)
 ```
 This function is responsible for rendering and implementing the logic behind the model page of the app. 
 #### def database_page()
 ```python
+  
 @app.route('/database-page', methods=['GET', 'POST'])  
 def database_page():  
     addentryform = AddEntryForm()  
@@ -1007,39 +1023,39 @@ def database_page():
     getCSVFormat = GetCSVFormatForm()  
     if request.method == "POST":  
         # add entry logic  
-  if addentryform.validate_on_submit():  
-            entry_to_create = Mould(  
-                fill_time=addentryform.Fill_time.data,  
-  injection_pres=addentryform.Injection_pres.data,  
-  holding_pres=addentryform.Holding_pres.data,  
-  holding_time=addentryform.Holding_time.data,  
-  cooling_time=addentryform.Cooling_time.data,  
-  mould_temp=addentryform.Mould_temp.data,  
-  clamp_force=addentryform.Clamp_force.data,  
-  shot_weight=addentryform.Shot_Weight.data,  
-  mould_SA=addentryform.Mould_SA.data,  
-  mould_vol=addentryform.Mould_vol.data,  
-  cavity_SA=addentryform.Cavity_SA.data,  
-  cavity_vol=addentryform.Cavity_vol.data,  
-  melt_temp=addentryform.Melt_temp.data,  
-  mat_density=addentryform.Mat_density.data,  
-  mat_GF=addentryform.Mat_GF.data,  
-  mat_MMFR=addentryform.Mat_MMFR.data,  
-  part_weight=addentryform.Part_weight.data  
-            )  
+	  if addentryform.validate_on_submit():  
+			  entry_to_create = Mould(  
+	              fill_time=addentryform.Fill_time.data,  
+				  injection_pres=addentryform.Injection_pres.data,  
+				  holding_pres=addentryform.Holding_pres.data,  
+				  holding_time=addentryform.Holding_time.data,  
+				  cooling_time=addentryform.Cooling_time.data,  
+				  mould_temp=addentryform.Mould_temp.data,  
+				  clamp_force=addentryform.Clamp_force.data,  
+				  shot_weight=addentryform.Shot_Weight.data,  
+				  mould_SA=addentryform.Mould_SA.data,  
+				  mould_vol=addentryform.Mould_vol.data,  
+				  cavity_SA=addentryform.Cavity_SA.data,  
+				  cavity_vol=addentryform.Cavity_vol.data,  
+				  melt_temp=addentryform.Melt_temp.data,  
+				  mat_density=addentryform.Mat_density.data,  
+				  mat_GF=addentryform.Mat_GF.data,  
+				  mat_MMFR=addentryform.Mat_MMFR.data,  
+				  part_weight=addentryform.Part_weight.data  
+	            )  
             entry_to_create.add_self()  
             flash('Entry added successfully', 'success')  
             return redirect(url_for('database_page'))  
   
         # add entry logic with csv  
-  if addentrycsv.validate_on_submit():  
-            filename = secure_filename(addentrycsv.file.data.filename)  
-            addentrycsv.file.data.save(app.config['UPLOADS'] + filename)  
-            add_from_csv(app.config['UPLOADS'] + filename)  
-            flash('CSV dataset added successfully', 'success')  
-            return redirect(url_for('database_page'))  
+	  if addentrycsv.validate_on_submit():  
+		   filename = secure_filename(addentrycsv.file.data.filename)  
+		   addentrycsv.file.data.save(os.path.join(app.config['UPLOADS'], filename))  
+		   add_from_csv(os.path.join(app.config['UPLOADS'], filename))  
+		   flash('CSV dataset added successfully', 'success')  
+		   return redirect(url_for('database_page')) 
   
-        if getCSVFormat.validate_on_submit() and request.form.get('Get-CSV'):  
+      if getCSVFormat.validate_on_submit() and request.form.get('Get-CSV'):  
             getCSV = request.form.get('Get-CSV')  
             if state.queryServerState():  
                 print('sending format')  
@@ -1056,7 +1072,7 @@ def database_page():
   
   
         # delete entry logic  
-  if deleteentryform.validate_on_submit():  
+	  if deleteentryform.validate_on_submit():  
             deleted_entry = request.form.get('deleted_entry')  
             d_entry_object = Mould.query.filter_by(id=deleted_entry).first()  
             if d_entry_object:  
@@ -1064,7 +1080,7 @@ def database_page():
                 flash('Entry deleted successfully', 'success')  
                 return redirect(url_for('database_page'))  
   
-        if exportallentries.validate_on_submit() and request.form.get('Export-DB'):  
+      if exportallentries.validate_on_submit() and request.form.get('Export-DB'):  
             export_db = request.form.get('Export-DB')  
             print('sending database')  
             if export_db:  
@@ -1078,35 +1094,35 @@ def database_page():
                         flash('Dataset could not be exported as Database.csv file already exists on your desktop', 'error')  
                         return redirect(url_for('database_page'))  
   
-        if deleteallentries.validate_on_submit():  
+       if deleteallentries.validate_on_submit():  
             purge_db = request.form.get('Purge-DB')  
             if purge_db:  
                 purge()  
                 flash('Dataset erased successfully', 'success')  
                 return redirect(url_for('database_page'))  
   
-        if addentrycsv.file.data and addentrycsv.errors != {}:  # If there are not errors from the validations  
-  for err_msg in addentrycsv.errors.values():  
-                flash(err_msg[0], category='error')  
-            return redirect(url_for('database_page'))  
+      if addentrycsv.file.data and addentrycsv.errors != {}:  
+		  for err_msg in addentrycsv.errors.values():  
+		                flash(err_msg[0], category='error')  
+		            return redirect(url_for('database_page'))  
   
-        if addentryform.Fill_time.raw_data and addentryform.errors != {}:  # If there are not errors from the validations  
-  flash('Invalid Values in New Entry Form', 'error')  
-            return redirect(url_for('database_page'))  
+      if addentryform.Fill_time.raw_data and addentryform.errors != {}:  
+		  flash('Invalid Values in New Entry Form', 'error')  
+		            return redirect(url_for('database_page'))  
   
   
     if request.method == "GET":  
         entries = Mould.query.all()  
         return render_template(  
-            'database.html',  
-  AddEntryForm=addentryform,  
-  DeleteEntryForm=deleteentryform,  
-  AddEntryCSV=addentrycsv,  
-  GetCSVFormatForm=getCSVFormat,  
-  DeleteAllEntries=deleteallentries,  
-  ExportAllEntries=exportallentries,  
-  entries=entries,  
-  getPredict=ml.getPredict  
+			  'database.html',  
+			  AddEntryForm=addentryform,  
+			  DeleteEntryForm=deleteentryform,  
+			  AddEntryCSV=addentrycsv,  
+			  GetCSVFormatForm=getCSVFormat,  
+			  DeleteAllEntries=deleteallentries,  
+			  ExportAllEntries=exportallentries,  
+			  entries=entries,  
+			  getPredict=ml.getPredict  
         )
 ```
 This function is responsible for rendering and implementing the logic behind the database page of the app.
@@ -1117,13 +1133,6 @@ def help_page():
     return render_template('help.html')
 ```
 This function is responsible for rendering the main landing page of the app.
-#### def documentation()
-```python
-@app.route('/documentation')  
-def documentation():  
-    return render_template('doc.html')
-```
-This function is responsible for rendering the extended documentation file.
 ___
 
 ### PYTHON SCRIPT : UI .py 
@@ -1132,6 +1141,7 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui, QtWebEngineWidgets  
 import socket  
 import ctypes  
+from sys import platform
   
   
 class ApplicationThread(QtCore.QThread):  
@@ -1161,14 +1171,15 @@ class WebPage(QtWebEngineWidgets.QWebEnginePage):
         if is_clicked and self.root_url not in ready_url:  
             QtGui.QDesktopServices.openUrl(url)  
             return False  
- return super(WebPage, self).acceptNavigationRequest(url, kind, is_main_frame)  
+	return super(WebPage, self).acceptNavigationRequest(url, kind, is_main_frame)  
   
   
 def init_gui(application, port=0, width=800, height=600,  
   window_title="title", icon="icon1.ico", argv=None):  
   
     myAppID = 'JoelKundu.Predictor'  
-  ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myAppID)  
+	if platform == "win32":
+	   ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myAppID)  
   
     if argv is None:  
         argv = sys.argv  
@@ -1208,6 +1219,7 @@ ___
 from flask import Flask  
 from flask_sqlalchemy import SQLAlchemy  
 import os  
+import json  
   
   
 class AppState(object):  
@@ -1233,11 +1245,18 @@ state = AppState()
 modulePath = os.path.abspath(__name__)  
 csvPath = 'static/client/csv/'  
 uploadPath = 'uploads/'  
-clientUploadPath = os.path.normpath(os.path.join(modulePath,uploadPath))  
+clientUploadPath = os.path.normpath(os.path.join(modulePath, uploadPath))  
 clientCSVPath = os.path.normpath(os.path.join(modulePath, csvPath))  
   
   
 app = Flask(__name__)  
+configPath = os.path.join(app.root_path, 'config.json')  
+config = open(configPath)  
+data = json.load(config)  
+if data["ServerMode"] == "True":  
+    print(" * Running in SERVER MODE")  
+    state.serverModeOn()  
+  
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  
 app.config['SECRET_KEY'] = '9a257ea9a3b0b646c25ec6f8'  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  
@@ -1257,8 +1276,7 @@ from pyfladesk import init_gui
   
   
 if __name__ == '__main__':  
-    init_gui(app, width=1600, height=900, window_title="Moulding Machine Parameter Predictor",  
-  icon='predictor/static/resources/icon.ico')
+    init_gui(app, width=1600, height=900, window_title="Moulding Machine Parameter Predictor", icon='predictor/static/resources/icon.ico')
 ```
 This script is responsible for launching the desktop app. It uses pyfladesk to create a barebones browser window in which the web app is rendered.
 ___
@@ -1310,32 +1328,32 @@ import joblib as jl
   
 if __name__ == '__main__':  
     parameter_space = {  
-        'hidden_layer_sizes': [(50, 50, 50)],  
-  'activation': ['tanh', 'relu', 'logistic', 'identity'],  
-  'solver': ['sgd', 'adam', 'lbfgs'],  
-  'alpha':  [0.001, 0.01, 0.1, 0.0001,  
-  0.002, 0.02, 0.2, 0.0002,  
-  0.003, 0.03, 0.3, 0.0003,  
-  0.004, 0.04, 0.4, 0.0004,  
-  0.005, 0.05, 0.5, 0.0005,  
-  0.006, 0.06, 0.6, 0.0006,  
-  0.007, 0.07, 0.7, 0.0007,  
-  0.008, 0.08, 0.8, 0.0008,  
-  0.009, 0.09, 0.9, 0.0009],  
-  'learning_rate': ['constant', 'adaptive', 'invscaling'],  
-  'learning_rate_init': [0.001, 0.01, 0.1, 0.0001,  
-  0.002, 0.02, 0.2, 0.0002,  
-  0.003, 0.03, 0.3, 0.0003,  
-  0.004, 0.04, 0.4, 0.0004,  
-  0.005, 0.05, 0.5, 0.0005,  
-  0.006, 0.06, 0.6, 0.0006,  
-  0.007, 0.07, 0.7, 0.0007,  
-  0.008, 0.08, 0.8, 0.0008,  
-  0.009, 0.09, 0.9, 0.0009],  
-  'random_state': [1399],  
-  'warm_start': [True],  
-  'max_iter': [100000, 75000, 125000],  
-  'verbose': [True]  
+		  'hidden_layer_sizes': [(50, 50, 50)],  
+		  'activation': ['tanh', 'relu', 'logistic', 'identity'],  
+		  'solver': ['sgd', 'adam', 'lbfgs'],  
+		  'alpha':  [0.001, 0.01, 0.1, 0.0001,  
+		  0.002, 0.02, 0.2, 0.0002,  
+		  0.003, 0.03, 0.3, 0.0003,  
+		  0.004, 0.04, 0.4, 0.0004,  
+		  0.005, 0.05, 0.5, 0.0005,  
+		  0.006, 0.06, 0.6, 0.0006,  
+		  0.007, 0.07, 0.7, 0.0007,  
+		  0.008, 0.08, 0.8, 0.0008,  
+		  0.009, 0.09, 0.9, 0.0009],  
+		  'learning_rate': ['constant', 'adaptive', 'invscaling'],  
+		  'learning_rate_init': [0.001, 0.01, 0.1, 0.0001,  
+		  0.002, 0.02, 0.2, 0.0002,  
+		  0.003, 0.03, 0.3, 0.0003,  
+		  0.004, 0.04, 0.4, 0.0004,  
+		  0.005, 0.05, 0.5, 0.0005,  
+		  0.006, 0.06, 0.6, 0.0006,  
+		  0.007, 0.07, 0.7, 0.0007,  
+		  0.008, 0.08, 0.8, 0.0008,  
+		  0.009, 0.09, 0.9, 0.0009],  
+		  'random_state': [1399],  
+		  'warm_start': [True],  
+		  'max_iter': [100000, 75000, 125000],  
+		  'verbose': [True]  
     }  
     trained_model = MLPRegressor()  
     X, y = database.get_datasets()  
@@ -1352,31 +1370,34 @@ This script will automatically optimize and retrain the stored model on the data
 ___
 
 ### BATCH SCRIPT Get-Dependencies .bat
-```
-pip install flask   
+```batch
+pip install flask  
 pip install flask-sqlalchemy  
 pip install flask-wtf  
 pip install wtforms  
-pip install sklearn 
+pip install pyfladesk  
+pip install sklearn  
 pip install mathplotlib  
 pip install numpy  
 pip install pandas  
-pip install os   
+pip install os  
 pip install shutil  
 pip install joblib
 ```
 This file is responsible for installing all the dependencies of the project using the pip installer that is provided with python. (for Windows)
 ### SHELL SCRIPT Get-Dependencies .sh
-```
-pip install flask   
+```bash
+#! /bin/sh  
+pip install flask  
 pip install flask-sqlalchemy  
 pip install flask-wtf  
-pip install wtforms    
+pip install wtforms  
+pip install pyfladesk  
 pip install sklearn  
 pip install mathplotlib  
 pip install numpy  
 pip install pandas  
-pip install os   
+pip install os  
 pip install shutil  
 pip install joblib
 ```
