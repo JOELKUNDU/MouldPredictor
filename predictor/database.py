@@ -4,7 +4,7 @@ from predictor.models import Mould
 import os
 import shutil
 from predictor import app
-from flask import send_from_directory, send_file
+from flask import flash, send_file
 
 
 headerLabels = ['Fill Time s','Injection Pressure (MPa)','Holding Pressure MPa','Holding Time s','Total Pack s',
@@ -49,50 +49,55 @@ def serverExportCSV():
 
 
 def add_from_csv(filepath):
-    dataframe = np.genfromtxt(filepath, delimiter=',')
-    dataframe = np.delete(dataframe, 0, 0)
-    rows = dataframe.shape[0]
-    for i in range(0, rows):
-        fill_time = dataframe[i][0]
-        injection_pres = dataframe[i][1]
-        holding_pres = dataframe[i][2]
-        holding_time = dataframe[i][3]
-        cooling_time = dataframe[i][4]
+    try:
+        dataframe = np.genfromtxt(filepath, delimiter=',')
+        dataframe = np.delete(dataframe, 0, 0)
+        rows = dataframe.shape[0]
+        for i in range(0, rows):
+            fill_time = dataframe[i][0]
+            injection_pres = dataframe[i][1]
+            holding_pres = dataframe[i][2]
+            holding_time = dataframe[i][3]
+            cooling_time = dataframe[i][4]
 
-        mould_temp = dataframe[i][5]
-        clamp_force = dataframe[i][6]
-        shot_weight = dataframe[i][7]
+            mould_temp = dataframe[i][5]
+            clamp_force = dataframe[i][6]
+            shot_weight = dataframe[i][7]
 
-        mould_SA = dataframe[i][8]
-        mould_vol = dataframe[i][9]
-        cavity_SA = dataframe[i][10]
-        cavity_vol = dataframe[i][11]
+            mould_SA = dataframe[i][8]
+            mould_vol = dataframe[i][9]
+            cavity_SA = dataframe[i][10]
+            cavity_vol = dataframe[i][11]
 
-        melt_temp = dataframe[i][12]
-        mat_density = dataframe[i][13]
-        mat_GF = dataframe[i][14]
-        mat_MMFR = dataframe[i][15]
-        part_weight = dataframe[i][16]
-        entry_to_create = Mould(
-            fill_time=fill_time,
-            injection_pres=injection_pres,
-            holding_pres=holding_pres,
-            holding_time=holding_time,
-            cooling_time=cooling_time,
-            mould_temp=mould_temp,
-            clamp_force=clamp_force,
-            shot_weight=shot_weight,
-            mould_SA=mould_SA,
-            mould_vol=mould_vol,
-            cavity_SA=cavity_SA,
-            cavity_vol=cavity_vol,
-            melt_temp=melt_temp,
-            mat_density=mat_density,
-            mat_GF=mat_GF,
-            mat_MMFR=mat_MMFR,
-            part_weight=part_weight,
-        )
-        entry_to_create.add_self()
+            melt_temp = dataframe[i][12]
+            mat_density = dataframe[i][13]
+            mat_GF = dataframe[i][14]
+            mat_MMFR = dataframe[i][15]
+            part_weight = dataframe[i][16]
+            entry_to_create = Mould(
+                fill_time=fill_time,
+                injection_pres=injection_pres,
+                holding_pres=holding_pres,
+                holding_time=holding_time,
+                cooling_time=cooling_time,
+                mould_temp=mould_temp,
+                clamp_force=clamp_force,
+                shot_weight=shot_weight,
+                mould_SA=mould_SA,
+                mould_vol=mould_vol,
+                cavity_SA=cavity_SA,
+                cavity_vol=cavity_vol,
+                melt_temp=melt_temp,
+                mat_density=mat_density,
+                mat_GF=mat_GF,
+                mat_MMFR=mat_MMFR,
+                part_weight=part_weight,
+            )
+            entry_to_create.add_self()
+        flash('CSV dataset added successfully', 'success')
+    except:
+        flash('Can\'t import data from CSV file due to incorrect format or the file is empty', 'error')
+
 
 
 def get_datasets():

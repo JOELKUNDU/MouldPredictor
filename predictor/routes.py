@@ -159,7 +159,6 @@ def database_page():
             filename = secure_filename(addentrycsv.file.data.filename)
             addentrycsv.file.data.save(os.path.join(app.config['UPLOADS'], filename))
             add_from_csv(os.path.join(app.config['UPLOADS'], filename))
-            flash('CSV dataset added successfully', 'success')
             return redirect(url_for('database_page'))
 
         if getCSVFormat.validate_on_submit() and request.form.get('Get-CSV'):

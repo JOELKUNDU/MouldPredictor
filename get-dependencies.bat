@@ -8,7 +8,7 @@ pip install matplotlib
 pip install numpy
 pip install pandas
 pip install joblib
-pip install flask-bcrypt
+pip install flask_bcrypt
 pip install flask_login
 pip install email_validator
 

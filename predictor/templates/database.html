@@ -79,13 +79,15 @@
 				<div>
 					{{ AddEntryCSV.hidden_tag() }}
 				<h3>Upload CSV file with data</h3>
-				<div class="form-row"> CSV file path
+					<h5>Choose the csv file to upload.</h5>
+				<div class="form-row">
 				{{ AddEntryCSV.file( class = "form-input-file" ) }} </div>
 				<div class="form-row2"> {{ AddEntryCSV.submit(class = "normal-btn") }} </div>
 				</div>
 			</form>
 			<form method="POST" class="form">
 					{{ GetCSVFormatForm.hidden_tag() }}
+				<br><br>
 				<h5>To get the CSV format to add data<br> click the button below.</h5>
 				<div class="form-row2">
 					<input id="Get-CSV" name="Get-CSV" type="hidden" value="True"> {{ GetCSVFormatForm.submit(class = "normal-btn") }}
@@ -112,10 +114,10 @@
 						<th scope="col">Mould Temperature</th>
 						<th scope="col">Clamp Force</th>
 						<th scope="col">Shot Weight</th>
-						<th scope="col">Mould Volume</th>
 						<th scope="col">Mould Surface Area</th>
-						<th scope="col">Cavity Volume</th>
+						<th scope="col">Mould Volume</th>
 						<th scope="col">Cavity Surface Area</th>
+						<th scope="col">Cavity Volume</th>
 						<th scope="col">Material Melt Temperature</th>
 						<th scope="col">Material Density</th>
 						<th scope="col">Material Glass %</th>

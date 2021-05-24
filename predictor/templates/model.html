@@ -33,7 +33,7 @@ Model Information
         </div>
     </section>
     <section class="form-body dark2">
-		<!--
+	<!--
 		<div class="form-div2">
 			<form method="POST" class="form">
 				{{RetrainModel.hidden_tag()}}
@@ -47,13 +47,13 @@ Model Information
 				<div id="loading" style="display:none;"><img src="{{ url_for('static', filename='resources/loading.gif') }}" alt="" />Loading!</div>
 			</form>
 		</div>
-		-->
+	-->
         <div class="form-div2">
 			<form method="POST" class="form">
 				{{HyperTuneModel.hidden_tag()}}
 				<div class="Title-text">
 					<h3>Auto HyperTune the ML model</h3>
-                    <h5>NOTE: This might take a very long time</h5>
+                    <h5>NOTE: This might take a very long time, you can leave this page.</h5>
 				</div>
 				<div class="form-row2">
 					<input id="HyperTune-model" name="HyperTune-model" type="hidden" value="True" onclick="$('#loading').show();"> {{ HyperTuneModel.submit(class = "normal-btn") }}

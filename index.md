@@ -53,10 +53,11 @@ This utility will attempt to eliminate the experimental method currently being u
 
 This utility uses an Artificial Neural Network (ANN), that has been already trained on a mix of real and simulated data. The trained ANN predicts the weight of the final part produced based on a set of machine parameters given as input. To find the optimal machine parameters, the utility first finds the actual weight of the part by multiplying the mould volume and raw material's density. Then the ANN cycles through all the possible machine parameters in a predefined range, predicting the part weight for each combination. The utility then outputs the optimal combination for which the predicted weight is greater or equal to the actual weight of the part.
 
+
 ## Prerequisites
 The user requires **Python3** to be already installed on their systems to use this utility. 
 #### ON WINDOWS
-To install python3 on windows, the user can get the installer from [here](https://www.python.org/downloads/).
+To install python3 on windows, the user can get the installer from [here](https://www.python.org/downloads/). Please ensure that python is added to PATH.
 #### ON LINUX
 To install python3 on Linux, the user can run the following command in the terminal
 ```
@@ -77,13 +78,14 @@ pip install matplotlib
 pip install numpy  
 pip install pandas   
 pip install joblib
-pip install flask-bcrypt
+pip install flask_bcrypt
 pip install flask_login
 pip install email_validator
 ```
 ## Download
 ##### Option 1 : 
-Users can download the archive from [here](https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip).
+Users can download the latest release from [here](https://github.com/JOELKUNDU/MouldPredictor/releases).
+
  ##### Option 2:
  Users can clone this repository using **git**, using the following commands.
 ```
@@ -120,7 +122,7 @@ To host the utility on a server, the user has to follow the following steps.
 - Make sure all the dependencies are present. If not please refer to the dependencies section
 - The user has to then open the terminal in the directory where the utility is saved and run the following command.
 	```
-	gunicorn -w 4 -b 127.0.0.1:5000 run-server:app
+	gunicorn -w 4 -b 0.0.0.0:5000 run-server:app
 	``` 
 	or
 	```
@@ -134,7 +136,7 @@ To host the utility on a server, the user has to follow the following steps.
 
 ## Usage
 ### Login and Register
-Whenever the user starts the application he has to enter his username and password on the login page. He has to input his username and password in the ir respective fields to login. The user can user the **Register** button on the login page to make a new account.
+Whenever the user starts the application he has to enter his username and password on the login page. He has to input his username and password in the  respective fields to login. The user can use the **Register** button on the login page to make a new account.
 
 ### Finding optimal machine parameters parameters
 To find the optimal machine parameter the user has to do the following steps.
@@ -279,50 +281,54 @@ The functions in this script are mainly responsible for the retrieval and manage
 #### def add_from_csv(filepath)
 ```python
 def add_from_csv(filepath):  
-    dataframe = np.genfromtxt(filepath, delimiter=',')  
-    dataframe = np.delete(dataframe, 0, 0)  
-    rows = dataframe.shape[0]  
-    for i in range(0, rows):  
-        fill_time = dataframe[i][0]  
-        injection_pres = dataframe[i][1]  
-        holding_pres = dataframe[i][2]  
-        holding_time = dataframe[i][3]  
-        cooling_time = dataframe[i][4]  
+    try:  
+        dataframe = np.genfromtxt(filepath, delimiter=',')  
+        dataframe = np.delete(dataframe, 0, 0)  
+        rows = dataframe.shape[0]  
+        for i in range(0, rows):  
+            fill_time = dataframe[i][0]  
+            injection_pres = dataframe[i][1]  
+            holding_pres = dataframe[i][2]  
+            holding_time = dataframe[i][3]  
+            cooling_time = dataframe[i][4]  
   
-        mould_temp = dataframe[i][5]  
-        clamp_force = dataframe[i][6]  
-        shot_weight = dataframe[i][7]  
+            mould_temp = dataframe[i][5]  
+            clamp_force = dataframe[i][6]  
+            shot_weight = dataframe[i][7]  
   
-        mould_SA = dataframe[i][8]  
-        mould_vol = dataframe[i][9]  
-        cavity_SA = dataframe[i][10]  
-        cavity_vol = dataframe[i][11]  
+            mould_SA = dataframe[i][8]  
+            mould_vol = dataframe[i][9]  
+            cavity_SA = dataframe[i][10]  
+            cavity_vol = dataframe[i][11]  
   
-        melt_temp = dataframe[i][12]  
-        mat_density = dataframe[i][13]  
-        mat_GF = dataframe[i][14]  
-        mat_MMFR = dataframe[i][15]  
-        part_weight = dataframe[i][16]  
-        entry_to_create = Mould(  
-								fill_time=fill_time,  
-								injection_pres=injection_pres,  
-								holding_pres=holding_pres,  
-								holding_time=holding_time,  
-								cooling_time=cooling_time,  
-								mould_temp=mould_temp,  
-								clamp_force=clamp_force,  
-								shot_weight=shot_weight,  
-								mould_SA=mould_SA,  
-								mould_vol=mould_vol,  
-								cavity_SA=cavity_SA,  
-								cavity_vol=cavity_vol,  
-								melt_temp=melt_temp,  
-								mat_density=mat_density,  
-								mat_GF=mat_GF,  
-								mat_MMFR=mat_MMFR,  
-								part_weight=part_weight,  
-							  )  
-        entry_to_create.add_self()
+            melt_temp = dataframe[i][12]  
+            mat_density = dataframe[i][13]  
+            mat_GF = dataframe[i][14]  
+            mat_MMFR = dataframe[i][15]  
+            part_weight = dataframe[i][16]  
+            entry_to_create = Mould(  
+									fill_time=fill_time,  
+									injection_pres=injection_pres,  
+									holding_pres=holding_pres,  
+									holding_time=holding_time,  
+									cooling_time=cooling_time,  
+									mould_temp=mould_temp,  
+									clamp_force=clamp_force,  
+									shot_weight=shot_weight,  
+									mould_SA=mould_SA,  
+									mould_vol=mould_vol,  
+									cavity_SA=cavity_SA,  
+									cavity_vol=cavity_vol,  
+									melt_temp=melt_temp,  
+									mat_density=mat_density,  
+									mat_GF=mat_GF,  
+									mat_MMFR=mat_MMFR,  
+									part_weight=part_weight,  
+									)  
+            entry_to_create.add_self()  
+        flash('CSV dataset added successfully', 'success')  
+    except:  
+        flash('Can\'t import data from CSV file due to incorrect format or the file is empty', 'error')
 ```
 This method takes a string with the file path to the csv file as input and imports the dataset into the database from that .csv file. This method doesn't verify that the columns are in the correct sequence or have valid values. This has to be done by the user beforehand.
 
@@ -701,32 +707,16 @@ Other methods of the class are described below.
 ```python
 def hyperTune():  
     parameter_space = {  
-			'hidden_layer_sizes': [(50, 50, 50)],  
-			'activation': ['tanh', 'relu', 'logistic', 'identity'],  
-			'solver': ['sgd', 'adam', 'lbfgs'],  
-			'alpha':  [0.001, 0.01, 0.1, 0.0001,  
-			0.002, 0.02, 0.2, 0.0002,  
-			0.003, 0.03, 0.3, 0.0003,  
-			0.004, 0.04, 0.4, 0.0004,  
-			0.005, 0.05, 0.5, 0.0005,  
-			0.006, 0.06, 0.6, 0.0006,  
-			0.007, 0.07, 0.7, 0.0007,  
-			0.008, 0.08, 0.8, 0.0008,  
-			0.009, 0.09, 0.9, 0.0009],  
-			'learning_rate': ['constant', 'adaptive', 'invscaling'],  
-			'learning_rate_init': [0.001, 0.01, 0.1, 0.0001,  
-			0.002, 0.02, 0.2, 0.0002,  
-			0.003, 0.03, 0.3, 0.0003,  
-			0.004, 0.04, 0.4, 0.0004,  
-			0.005, 0.05, 0.5, 0.0005,  
-			0.006, 0.06, 0.6, 0.0006,  
-			0.007, 0.07, 0.7, 0.0007,  
-			0.008, 0.08, 0.8, 0.0008,  
-			0.009, 0.09, 0.9, 0.0009],  
-			'random_state': [1399],  
-			'warm_start': [True],  
-			'max_iter': [100000, 75000, 125000],  
-			'verbose': [True]  
+        'hidden_layer_sizes': [(50, 50, 50)],  
+  'activation': ['tanh', 'relu', 'logistic', 'identity'],  
+  'solver': ['sgd', 'adam', 'lbfgs'],  
+  'alpha':  np.arange(0.0001, 0.09, 100),  
+  'learning_rate': ['constant', 'adaptive', 'invscaling'],  
+  'learning_rate_init': np.arange(0.0001, 0.09, 100),  
+  'random_state': [1399],  
+  'warm_start': [True],  
+  'max_iter': [100000, 75000, 125000, 250000, 350000],  
+  'verbose': [True]  
     }  
     trained_model = MLPRegressor()  
     X, y = database.get_datasets()  
@@ -736,26 +726,23 @@ def hyperTune():
     print('\n\n\nBEST PARAMS', clf.best_params_)  
     print('\n\n\nResults', clf.cv_results_)  
   
-	pred = clf.predict(X_test)  
-	  
-	ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)  
-	ml_metrics.modelScore = getScore()  
-	ml_metrics.max_error = metrics.max_error(y_test, pred)  
-	ml_metrics.savePerformance()  
-	  
-	pred = clf.predict(X)  
-	  
-	# Preparing the scatter plot of the model's prediction  
-	plt.scatter(y, pred, color='b')  
-	plt.xlabel('Actual Weight')  
-	plt.ylabel('Predicted Weight')  
-	plt.title('Scatter Plot (Actual vs Predicted Part Weight)')  
-	# save the plot  
-	plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')  
-	ml_metrics.loadPerformance()  
-	if os.path.exists('predictor/static/ML/config.joblib'):  
-	    os.remove('predictor/static/ML/config.joblib')  
-	jl.dump(clf, 'predictor/static/ML/config.joblib')
+    pred = clf.predict(X_test)  
+  
+    ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)  
+    ml_metrics.modelScore = getScore()  
+    ml_metrics.max_error = metrics.max_error(y_test, pred)  
+    ml_metrics.savePerformance()  
+  
+    pred = clf.predict(X)  
+  
+    plt.scatter(y, pred, color='b')  
+    plt.xlabel('Actual Weight')  
+    plt.ylabel('Predicted Weight')  
+    plt.title('Scatter Plot (Actual vs Predicted Part Weight)')  
+    plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')  
+    ml_metrics.loadPerformance()  
+    jl.dump(clf, 'predictor/static/ML/config.joblib')  
+    flash('HyperTuning Complete', 'success')
 ```
 This function uses [RandomizedSearchCV](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html?highlight=randomized#sklearn.model_selection.RandomizedSearchCV) from scikit learn library to set the optimal parameters for the ANN. Since the method is randomized a few executions of this method might be required before optimal parameters can be set. This function is also responsible for saving the optimized model for later use. This is implemented using the joblib library
 #### def MLPRmodel(X_test)
@@ -812,7 +799,7 @@ def retrain():
   
     trained_model = jl.load('predictor/static/ML/config.joblib')  
   
-    trained_model.partial_fit(X_train, y_train)  
+    trained_model.fit(X_train, y_train)  
     pred = trained_model.predict(X_test)  
   
     ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)  
@@ -867,35 +854,40 @@ def predict(
     weight_actual = Mould_vol * Mat_density  
     print("\nweight:", weight_actual)  
     first_pred = True  
-	param = []  
-    for ft in range(Fill_time_min, Fill_time_max + 1, Fill_time_res):  
-        for ip in range(Injection_pres_min, Injection_pres_max + 1, Injection_pres_res):  
-            for hp in range(Holding_pres_min, Holding_pres_max + 1, Holding_pres_res):  
-                for ht in range(Holding_time_min, Holding_time_max + 1, Holding_time_res):  
-                    for ct in range(Cooling_time_min, Cooling_time_max + 1, Cooling_time_res):  
-                        X = [[ft, ip, hp, ht, ct,  
-							  Mould_temp, Clamp_force, Shot_Weight,  
-							  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
-							  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
-                        pred = trained_model.predict(X)  
-                        print("param:", X, "\nPred:", pred, "\nweight:", weight_actual)  
-                        if weight_actual <= pred[0] <= weight_actual * 1.01:  
-                            if first_pred:  
-                                param = X[0]  
-                                param.append(pred[0])  
-                                param.append(weight_actual)  
-                                break  
-					 else:  
-                        continue  
-				 break else:  
-                    continue  
-			 break else:  
-                continue  
-		 break else:  
-            continue  
-	 break return param
+	print('\r * Finding Parameters')  
+	for ft in range(Fill_time_min, Fill_time_max + 1, Fill_time_res):  
+	    for ip in range(Injection_pres_min, Injection_pres_max + 1, Injection_pres_res):  
+	        for hp in range(Holding_pres_min, Holding_pres_max + 1, Holding_pres_res):  
+	            for ht in range(Holding_time_min, Holding_time_max + 1, Holding_time_res):  
+	                for ct in range(Cooling_time_min, Cooling_time_max + 1, Cooling_time_res):  
+	                    X = [[ft, ip, hp, ht, ct,  
+	  Mould_temp, Clamp_force, Shot_Weight,  
+	  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
+	  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
+	                    pred = trained_model.predict(X)  
+	                    if weight_actual * 0.99 <= pred[0] <= weight_actual * 1.01:  
+	                        if first_pred:  
+	                            print("param:", X, "\nPred:", pred, "\nweight:", weight_actual)  
+	                            parameter = X[0]  
+	                            parameter.append(pred[0])  
+	                            parameter.append(weight_actual)  
+	                            param.append(parameter)  
+	  
+	try:  
+	    minErrorParameter = []  
+	    minErrorValue = abs(param[0][17] - param[0][16])  
+	    for parameter in param:  
+	        error = abs(parameter[17] - parameter[16])  
+	        if abs(error < minErrorValue):  
+	            minErrorParameter = parameter  
+	            minErrorValue = error  
+	            print(' * Current Minimum: ', parameter)  
+	            print(' * min error value: ', minErrorValue)  
+	    return minErrorParameter  
+	except:  
+	    return []
 ```
-This function takes the values from the variables in the parameter list, then it starts to iterate through all the possible combination of the individual parameters bounded by the upper and lower (minimum and maximum) values that were also passed in as a parameter. The function then passes each iteration through the ANN and verifies if the predicted weight is greater than the value we would get from mould volume x raw material density. If it verifies true then that combination is returned as the optimal set of machine parameters.
+This function takes the values from the variables in the parameter list, then it starts to iterate through all the possible combination of the individual parameters bounded by the upper and lower (minimum and maximum) values that were also passed in as a parameter. The function then passes each iteration through the ANN and verifies if the predicted weight is greater than the value we would get from mould volume multiplied by raw material density. If it verifies true then that combination is stored in an array. After iterating through all the combination the error of each prediction falling between 1%  more or less of actual weight is compared and the combination of parameters with the lowest error is returned as the optimal value.
 ___
 ### PYTHON SCRIPT: Models .py
 This python script defines all the tables that are stored in the SQLAlchemy database. Detailed documentation about the SQLAlchemy functions used in this script can be found [here](https://docs.sqlalchemy.org/).
@@ -1472,41 +1464,29 @@ print('Full Score:', trained_model.score(X, y))
 This script was created to ensure that the model hasn't been overtrained on the given data. In case the model has been overtrained the model score on the training data will be higher than the testing data. In an ideal case, the scores should be approximately equal to each other.
 ### PYTHON SCRIPT: Man-HyperTune .py
 ```python
+"""  
+This script will auto-hyper tune the model and then retrain it without opening the app  
+"""  
 from sklearn.neural_network import MLPRegressor  
 from sklearn.model_selection import train_test_split  
 from sklearn.model_selection import GridSearchCV  
 import predictor.machine_learning as ml  
 import predictor.database as database  
 import joblib as jl  
+import numpy as np  
   
 if __name__ == '__main__':  
     parameter_space = {  
-		  'hidden_layer_sizes': [(50, 50, 50)],  
-		  'activation': ['tanh', 'relu', 'logistic', 'identity'],  
-		  'solver': ['sgd', 'adam', 'lbfgs'],  
-		  'alpha':  [0.001, 0.01, 0.1, 0.0001,  
-		  0.002, 0.02, 0.2, 0.0002,  
-		  0.003, 0.03, 0.3, 0.0003,  
-		  0.004, 0.04, 0.4, 0.0004,  
-		  0.005, 0.05, 0.5, 0.0005,  
-		  0.006, 0.06, 0.6, 0.0006,  
-		  0.007, 0.07, 0.7, 0.0007,  
-		  0.008, 0.08, 0.8, 0.0008,  
-		  0.009, 0.09, 0.9, 0.0009],  
-		  'learning_rate': ['constant', 'adaptive', 'invscaling'],  
-		  'learning_rate_init': [0.001, 0.01, 0.1, 0.0001,  
-		  0.002, 0.02, 0.2, 0.0002,  
-		  0.003, 0.03, 0.3, 0.0003,  
-		  0.004, 0.04, 0.4, 0.0004,  
-		  0.005, 0.05, 0.5, 0.0005,  
-		  0.006, 0.06, 0.6, 0.0006,  
-		  0.007, 0.07, 0.7, 0.0007,  
-		  0.008, 0.08, 0.8, 0.0008,  
-		  0.009, 0.09, 0.9, 0.0009],  
-		  'random_state': [1399],  
-		  'warm_start': [True],  
-		  'max_iter': [100000, 75000, 125000],  
-		  'verbose': [True]  
+        'hidden_layer_sizes': [(50, 50, 50)],  
+  'activation': ['tanh', 'relu', 'logistic', 'identity'],  
+  'solver': ['sgd', 'adam', 'lbfgs'],  
+  'alpha':  np.arange(0.0001, 0.09, 100),  
+  'learning_rate': ['constant', 'adaptive', 'invscaling'],  
+  'learning_rate_init': np.arange(0.0001, 0.09, 100),  
+  'random_state': [1399],  
+  'warm_start': [True],  
+  'max_iter': [100000, 75000, 125000],  
+  'verbose': [True]  
     }  
     trained_model = MLPRegressor()  
     X, y = database.get_datasets()  
@@ -1516,7 +1496,6 @@ if __name__ == '__main__':
     print('\n\n\nBEST PARAMS', clf.best_params_)  
     print('\n\n\nResults', clf.cv_results_)  
     jl.dump(clf, 'predictor/static/ML/config.joblib')  
-    ml.retrain()
 ```
 This script will automatically optimize and retrain the stored model on the dataset stored in the database without opening the app. This script uses GridSearchCV hence takes longer than the RandomizedSearchCV function used by the Auto-HyperTune function. However, this script will optimize the model the best performing configuration in a single execution.
 
@@ -1534,7 +1513,7 @@ pip install matplotlib
 pip install numpy  
 pip install pandas   
 pip install joblib
-pip install flask-bcrypt
+pip install flask_bcrypt
 pip install flask_login
 pip install email_validator
 ```
@@ -1552,7 +1531,7 @@ pip install matplotlib
 pip install numpy  
 pip install pandas   
 pip install joblib
-pip install flask-bcrypt
+pip install flask_bcrypt
 pip install flask_login
 pip install email_validator
 ```

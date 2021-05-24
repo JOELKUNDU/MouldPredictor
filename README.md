@@ -13,7 +13,7 @@ This utility uses an Artificial Neural Network (ANN), that has been already trai
 ## Prerequisites
 The user requires **Python3** to be already installed on their systems to use this utility. 
 #### ON WINDOWS
-To install python3 on windows, the user can get the installer from [here](https://www.python.org/downloads/).
+To install python3 on windows, the user can get the installer from [here](https://www.python.org/downloads/). Please ensure that python is added to PATH.
 #### ON LINUX
 To install python3 on Linux, the user can run the following command in the terminal
 ```
@@ -30,16 +30,18 @@ pip install flask-wtf
 pip install wtforms  
 pip install pyfladesk  
 pip install sklearn  
-pip install mathplotlib  
+pip install matplotlib  
 pip install numpy  
-pip install pandas  
-pip install os   
-pip install shutil  
+pip install pandas   
 pip install joblib
+pip install flask_bcrypt
+pip install flask_login
+pip install email_validator
 ```
 ## Download
+
 -  Option 1 : 
-Users can download the archive from [here](https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip).
+Users can download the latest release from [here](https://github.com/JOELKUNDU/MouldPredictor/releases).
 
  - Option 2:
  Users can clone this repository using **git**, using the following commands.
@@ -62,10 +64,11 @@ make
 This will make an execuatable with the name **Predictor-linux** which the user can then run.
 
 
+
 #### TO RUN AS A WEB APP
 The utility can be used as a desktop app or it can also be used as a web app hosted on a server. 
 To host the utility on a server, the user has to follow the following steps.
-- The user has to edit the **config.json** file in the predictor directory and change the value for ServerMode from False (default) to True (Case-sensitive) 
+- The user has to edit the **config.json** file in the predictor and change the value for ServerMode from False (default) to True (Case-sensitive) 
 	```json
 	{  
 	  "ServerMode" : "True"  
@@ -78,12 +81,8 @@ To host the utility on a server, the user has to follow the following steps.
 - Make sure all the dependencies are present. If not please refer to the dependencies section
 - The user has to then open the terminal in the directory where the utility is saved and run the following command.
 	```
-	gunicorn -w 4 -b 127.0.0.1:5000 run-server:app
+	gunicorn -w 4 -b 0.0.0.0:5000 run-server:app
 	``` 
-    or
-  ```
-    bash server.sh
-  ```
 - The web app would be hosted on **https://{ip address of the server}/5000/**
 - To stop the server , the user can run the following comand.
 	```
