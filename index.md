@@ -8,6 +8,7 @@
 	- [As a Desktop App](#to-run-as-a-desktop-app)
 	- [As a Web App](#to-run-as-a-web-app)
 5.	[Usage](#usage)
+	- [Login and Register](#login-and-register)
 	 - [Finding optimal machine parameters parameters](#finding-optimal-machine-parameters-parameters)
 	 - [Managing the database](#managing-the-database)
 		 - [Adding a single new entry to the database](#adding-a-single-new-entry-to-the-database)
@@ -16,12 +17,13 @@
 		 - [Deleting the entire database](#deleting-the-entire-database)
 		 - [Export entire database as a CSV](#export-entire-database-as-a-csv)
 		 - [Export CSV Format to add data to the database](#export-csv-format-to-add-data-to-the-database)
+		 - [Add an entirely new dataset to the databse](#add-an-entirely-new-dataset-to-the-databse)
 	 - [Managing the Artificial Neural Network](#managing-the-artificial-neural-network)
 		 - [Understanding the performance of the ANN](#understanding-the-performance-of-the-ann)
 		 - [Retrain the model](#retrain-the-model)
 		 - [HyperTuning the Model](#hypertuning-the-model)
 	-	[Getting Help](#getting-help)
-6.	[Code Documentation](#code-documentation)
+7.	[Code Documentation](#code-documentation)
 	- [Technology Documentation](#technology-documentation)	
 	- [predictor/database.py](#python-script--database-.py)
 	- [predictor/forms.py](#python-script-forms-.py)
@@ -38,12 +40,10 @@
 	- [get-dependencies.bat](#batch-script-get-dependencies-.bat)
 	- [get-dependencies.sh](#shell-script-get-dependencies-.sh)
 	- [source.cpp](#c-file-source.cpp)
-7.	[Author and License](#author-and-license)
-8.	[Contact](#contact)
+8.	[Author and License](#author-and-license)
+9.	[Contact](#contact)
 
 ___
-
-
 ## Introduction
 Injection moulding is the most popular and widely used manufacturing process for the mass production of plastic products. In the process, a polymer is melted by electric and frictional heat and is injected into a metal mould under high pressure. The quality of the part produced is greatly influenced by process conditions. These process conditions can be changed by changing the machine parameters and is usually done by an experienced engineer. Whenever a new mould is created an engineer will experimentally determine the optimal parameters via repeated trials and visual inspection of the created product. This method is necessary as there is no theoretical method to predict the quality of the part produced given a set of machine parameters. This makes the process highly dependant on the knowledge and experience of the engineer which makes it hard to transfer the skill to a new operator. Wastage in the form of defective products, machine downtime, labour and energy also happen due to the experimental method. Another alternative to the experimental method is simulations. However, simulations are slow and computationally expensive.
 
@@ -73,23 +73,23 @@ pip install flask-wtf
 pip install wtforms  
 pip install pyfladesk  
 pip install sklearn  
-pip install mathplotlib  
+pip install matplotlib  
 pip install numpy  
-pip install pandas  
-pip install os   
-pip install shutil  
+pip install pandas   
 pip install joblib
+pip install flask-bcrypt
+pip install flask_login
+pip install email_validator
 ```
 ## Download
--  Option 1 : 
+##### Option 1 : 
 Users can download the archive from [here](https://github.com/JOELKUNDU/MouldPredictor/archive/refs/heads/main.zip).
-
- - Option 2:
+ ##### Option 2:
  Users can clone this repository using **git**, using the following commands.
-	```
-	git clone https://github.com/JOELKUNDU/MouldPredictor.git
-	cd MouldPredictor
-	```
+```
+git clone https://github.com/JOELKUNDU/MouldPredictor.git
+cd MouldPredictor
+```
 
 
 ## Installation
@@ -107,7 +107,7 @@ This will make an executable with the name **Predictor-linux** which the user ca
 #### TO RUN AS A WEB APP
 The utility can be used as a desktop app or it can also be used as a web app hosted on a server. 
 To host the utility on a server, the user has to follow the following steps.
-- The user has to edit the **config.json** file in the predictor directory and change the value for ServerMode from False (default) to True (Case-sensitive) 
+- The user has to edit the **config.json** file in the predictor and change the value for ServerMode from False (default) to True (Case-sensitive) 
 	```json
 	{  
 	  "ServerMode" : "True"  
@@ -121,11 +121,11 @@ To host the utility on a server, the user has to follow the following steps.
 - The user has to then open the terminal in the directory where the utility is saved and run the following command.
 	```
 	gunicorn -w 4 -b 127.0.0.1:5000 run-server:app
+	``` 
+	or
 	```
- 	or
-   ```
-    bash server.sh
-  ```
+	 bash server.sh
+	 ```	
 - The web app would be hosted on **https://{ip address of the server}/5000/**
 - To stop the server , the user can run the following comand.
 	```
@@ -133,6 +133,9 @@ To host the utility on a server, the user has to follow the following steps.
 	 ```
 
 ## Usage
+### Login and Register
+Whenever the user starts the application he has to enter his username and password on the login page. He has to input his username and password in the ir respective fields to login. The user can user the **Register** button on the login page to make a new account.
+
 ### Finding optimal machine parameters parameters
 To find the optimal machine parameter the user has to do the following steps.
 - The user has to open the **Predict** tab from the navigation bar on the top of the screen
@@ -184,6 +187,23 @@ To export the CSV format that the user can use to input data to the dataset the 
 NOTE Please ensure there is no Format.csv file on the desktop else the function will fail.
 - If the application is being used as a web app then the file will simply be downloaded on the client system.
 
+#### Add an entirely new dataset to the databse
+To change the data that the model is being trained on the user has to follow the following steps.
+-   The user has to open the  **Database**  tab from the navigation bar on the top of the screen
+- The user has to scroll down to the bottom of the screen.
+- The user has to click on the green button labelled **EXPORT DATABASE AS CSV** to make a copy of the existing database.
+- If the user wished to remove the existing data then the user has to then click on the red button labelled **WARNING: DELETE ENTIRE DATABASE** else he can skip this step.
+- The user can then add the new data using a csv file using the steps given [here](#adding-data-entries-from-a-csv-file) or add one entry at a time using the steps given [here](#adding-a-single-new-entry-to-the-database).
+- The user has to open the **Model** tab from the navigation bar on the top of the screen
+- The user has to scroll down to the bottom of the screen.
+- The user has to then click on the button labelled **Auto-HyperTune the model** and wait for the process to complete alternatively he can open a terminal (command prompt) in the root directory of the project and use the following command. 
+	```bash
+	python man-hypertune.py
+	```
+- The user has to then open the **Database**  tab from the navigation bar on the top of the screen and then go through the new database to verify all the rows have their predicted error below 3%. The user must delete all the rows that have an error of higher than 3%.
+	
+
+
 ### Managing the Artificial Neural Network 
 #### Understanding the performance of the ANN
 To view the performance of the ANN, the user has to open the **Model** tab from the navigation bar on the top of the screen. When the screen loads, The user would be presented with a scatter plot ( Predicted weights vs Actual Weights ). The closer the scatters are to the diagonal of the chart, the better is the performance of the model. Below the plot, three performance metrics are shown.
@@ -194,19 +214,11 @@ To view the performance of the ANN, the user has to open the **Model** tab from 
 The performance of the model can be increased by regularly retraining the ANN on the expanding database.
 The performance of the model can also be increased by occasionally hypertunning the model. However significant improvement might not happen after the first few uses of this tool
 
-#### Retrain the model
-Retraining the model allows the ANN to improve its performance by learning from the new data added to the database. To retrain the ANN the user has to follow the following steps.
-- The user has to open the **Model** tab from the navigation bar on the top of the screen
-- The user has to scroll down to the bottom of the screen.
-- The user has to click on the button labelled **Retrain the model**
-- This user can observe the process happening in the terminal window that opens along with the utility
-- **NOTE**: This process will take time.
-
 #### HyperTuning the Model
 Hyper-Parameter tuning allows the model to tweak its setting automatically to better perform on the given dataset. This utility is fully automatic and requires no input from the user. To HyperTune the model, the user has to follow the following steps.
 - The user has to open the **Model** tab from the navigation bar on the top of the screen
 - The user has to scroll down to the bottom of the screen.
-- - The user has to click on the button labelled **Auto-HyperTune the model**
+- The user has to click on the button labelled **Auto-HyperTune the model**
 - This user can observe the process happening in the terminal window that opens along with the utility
 - **NOTE**: This process will take time.
 
@@ -252,6 +264,12 @@ Os
 
 Shutil
 : [https://docs.python.org/3/library/shutil.html](https://docs.python.org/3/library/shutil.html)
+
+Flask_login
+: [https://flask-login.readthedocs.io/en/latest/](https://flask-login.readthedocs.io/en/latest/)
+
+Flask_Bcrypt
+: [https://flask-bcrypt.readthedocs.io/en/latest/](https://flask-bcrypt.readthedocs.io/en/latest/)
 
 
 ___
@@ -411,7 +429,7 @@ def exportCSV():
             dataframe.append(data_object)  
         dataframe = np.array(dataframe)  
         DF = pd.DataFrame(dataframe)  
-        DF.to_csv('predictor/uploads/database.csv')  
+        DF.to_csv('predictor/uploads/database.csv', index=False, header=headerLabels)  
         source = 'predictor/uploads/database.csv'  
 	    shutil.copyfile(source, dest)  
         return True
@@ -470,7 +488,7 @@ def serverExportCSV():
     DF = pd.DataFrame(dataframe)  
     source = os.path.join(app.config['CLIENT_CSV'], 'database.csv')  
     os.remove(source)  
-    DF.to_csv(source)  
+    DF.to_csv(source, index=False, header=headerLabels)  
     return send_file(source, as_attachment=True, attachment_filename='database.csv')
 ```
 This function converts the database to a csv file and sends it to the user when in web app mode.
@@ -599,6 +617,36 @@ class HyperTuneModel(FlaskForm):
 This class defines the Auto Hyper-Tune the model button shown at the bottom of the screen of the model tab.
 
 User can refer to the functions in models .py, machine_learning .py, database .py or routes .py to understand how each of these form's logic is implemented.
+
+#### class RegisterForm(FlaskForm)  
+```python
+class RegisterForm(FlaskForm):  
+    def validate_username(self, username_to_check):  
+        user = User.query.filter_by(username=username_to_check.data).first()  
+        if user:  
+            raise ValidationError('Username already exists! Please try a different username')  
+  
+    def validate_email_address(self, email_address_to_check):  
+        email_address = User.query.filter_by(email_address=email_address_to_check.data).first()  
+        if email_address:  
+            raise ValidationError('Email Address already exists! Please try a different email address')  
+  
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])  
+    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])  
+    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])  
+    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])  
+    submit = SubmitField(label='Create Account')
+```
+This class defines the Register form that the user uses to create a new account in the system.
+
+#### class LoginForm(FlaskForm)
+```python
+class LoginForm(FlaskForm):  
+    username = StringField(label='User Name:', validators=[DataRequired()])  
+    password = PasswordField(label='Password:', validators=[DataRequired()])  
+    submit = SubmitField(label='Sign in')
+   ```
+   This class defines the Login form that the user uses to login.
 ___
 
 ### PYTHON SCRIPT: Machine_learning .py
@@ -625,9 +673,7 @@ class ModelMetrics:
         perf = DBModelMetrics.query.filter_by(id=1).first()  
         self.absolute_mean_error = perf.absolute_mean_error  
         self.modelScore = perf.model_score  
-        self.max_error = perf.max_error  
-        self.printMetric()  
-  
+        self.max_error = perf.max_error    
   
 ml_metrics = ModelMetrics()
 ```
@@ -689,8 +735,27 @@ def hyperTune():
     clf.fit(X, y)  
     print('\n\n\nBEST PARAMS', clf.best_params_)  
     print('\n\n\nResults', clf.cv_results_)  
-    jl.dump(clf, 'predictor/static/ML/config.joblib')  
-    retrain()
+  
+	pred = clf.predict(X_test)  
+	  
+	ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)  
+	ml_metrics.modelScore = getScore()  
+	ml_metrics.max_error = metrics.max_error(y_test, pred)  
+	ml_metrics.savePerformance()  
+	  
+	pred = clf.predict(X)  
+	  
+	# Preparing the scatter plot of the model's prediction  
+	plt.scatter(y, pred, color='b')  
+	plt.xlabel('Actual Weight')  
+	plt.ylabel('Predicted Weight')  
+	plt.title('Scatter Plot (Actual vs Predicted Part Weight)')  
+	# save the plot  
+	plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')  
+	ml_metrics.loadPerformance()  
+	if os.path.exists('predictor/static/ML/config.joblib'):  
+	    os.remove('predictor/static/ML/config.joblib')  
+	jl.dump(clf, 'predictor/static/ML/config.joblib')
 ```
 This function uses [RandomizedSearchCV](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html?highlight=randomized#sklearn.model_selection.RandomizedSearchCV) from scikit learn library to set the optimal parameters for the ANN. Since the method is randomized a few executions of this method might be required before optimal parameters can be set. This function is also responsible for saving the optimized model for later use. This is implemented using the joblib library
 #### def MLPRmodel(X_test)
@@ -747,7 +812,7 @@ def retrain():
   
     trained_model = jl.load('predictor/static/ML/config.joblib')  
   
-    trained_model.fit(X_train, y_train)  
+    trained_model.partial_fit(X_train, y_train)  
     pred = trained_model.predict(X_test)  
   
     ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)  
@@ -780,7 +845,8 @@ def getPredict(Fill_time, Injection_pres, Holding_pres, Holding_time, Cooling_ti
 		  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  
 		  Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]  
     pred = trained_model.predict(X)  
-    return pred[0]
+	pred[0] = abs(((pred[0]-part_weight)/part_weight)*100)  
+	return str(round(pred[0], 3))
 ```
 This functions takes the values from the variables in the parameter list, converts them into a list that can be passed into the model. It then loads the model and passes the previously created list to get one prediction. The function then returns this prediction.
 
@@ -901,6 +967,27 @@ This class defines the table that stores the model's performance metrics. The fo
 
 def save(self)
 : This deletes the presently stored metric and saves the new metrics save in the object in the database.
+
+#### class User(db.Model)
+```python
+class User(db.Model, UserMixin):  
+    id = db.Column(db.Integer(), primary_key=True)  
+    username = db.Column(db.String(length=30), nullable=False, unique=True)  
+    email_address = db.Column(db.String(length=50), nullable=False, unique=True)  
+    password_hash = db.Column(db.String(length=60), nullable=False)  
+  
+	@property  
+	def password(self):  
+	    return self.password  
+
+	@password.setter  
+	def password(self, plain_text_password):  
+	    self.password_hash = bcrypt.generate_password_hash(plain_text_password).decode('utf-8')  
+  
+    def check_password_correction(self, attempted_password):  
+        return bcrypt.check_password_hash(self.password_hash, attempted_password)
+```
+This class defines the user table stored in the database and the is used by flask login manager to authenticate the session.
 ___
 ### PYTHON SCRIPT: Routes .py
 This script handles the app routing for the Flask App. App routing is used to map the specific URL with the associated function that is intended to perform some task. It is used to access some particular page like the predict page or the database page. 
@@ -1137,6 +1224,58 @@ def help_page():
     return render_template('help.html')
 ```
 This function is responsible for rendering the main landing page of the app.
+
+#### def register_page()
+```python
+@app.route('/register', methods=['GET', 'POST'])  
+def register_page():  
+    form = RegisterForm()  
+    if form.validate_on_submit():  
+        user_to_create = User(username=form.username.data,  
+							  email_address=form.email_address.data,  
+							  password=form.password1.data)  
+        db.session.add(user_to_create)  
+        db.session.commit()  
+        login_user(user_to_create)  
+        flash(f"Account created successfully! You are now logged in as {user_to_create.username}", category='success')  
+        return redirect(url_for('main_page'))  
+    if form.errors != {}:  
+        for err_msg in form.errors.values():  
+            flash(f'There was an error with creating a user: {err_msg}', category='danger')  
+  
+    return render_template('register.html', form=form)
+```
+This function is responsible for rendering the user registeration page.
+
+#### 
+```python
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    form = LoginForm()
+    if form.validate_on_submit():
+        attempted_user = User.query.filter_by(username=form.username.data).first()
+        if attempted_user and attempted_user.check_password_correction(
+                attempted_password=form.password.data
+        ):
+            login_user(attempted_user)
+            flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
+            return redirect(url_for('market_page'))
+        else:
+            flash('Username and password are not match! Please try again', category='danger')
+
+    return render_template('login.html', form=form)
+```
+This function is responsible for rendering the login in page.
+
+#### def logout_page()
+```python
+@app.route('/logout')
+def logout_page():
+    logout_user()
+    flash("You have been logged out!", category='info')
+    return redirect(url_for("home_page"))
+```
+This function is responsible for logging out the user.
 ___
 
 ### PYTHON SCRIPT : UI .py 
@@ -1261,12 +1400,22 @@ if data["ServerMode"] == "True":
     print(" * Running in SERVER MODE")  
     state.serverModeOn()  
   
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  
 app.config['SECRET_KEY'] = '9a257ea9a3b0b646c25ec6f8'  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  
 app.config['CLIENT_CSV'] = clientCSVPath  
 app.config['UPLOADS'] = clientUploadPath  
 db = SQLAlchemy(app)  
+  
+  
+@app.after_request  
+def add_header(response):  
+    # response.cache_control.no_store = True  
+  response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'  
+  response.headers['Pragma'] = 'no-cache'  
+  response.headers['Expires'] = '-1'  
+  return response  
   
   
 from predictor import routes
@@ -1375,35 +1524,37 @@ ___
 
 ### BATCH SCRIPT Get-Dependencies .bat
 ```batch
-pip install flask  
+pip install flask   
 pip install flask-sqlalchemy  
 pip install flask-wtf  
 pip install wtforms  
 pip install pyfladesk  
 pip install sklearn  
-pip install mathplotlib  
+pip install matplotlib  
 pip install numpy  
-pip install pandas  
-pip install os  
-pip install shutil  
+pip install pandas   
 pip install joblib
+pip install flask-bcrypt
+pip install flask_login
+pip install email_validator
 ```
 This file is responsible for installing all the dependencies of the project using the pip installer that is provided with python. (for Windows)
 ### SHELL SCRIPT Get-Dependencies .sh
 ```bash
 #! /bin/sh  
-pip install flask  
+pip install flask   
 pip install flask-sqlalchemy  
 pip install flask-wtf  
 pip install wtforms  
 pip install pyfladesk  
 pip install sklearn  
-pip install mathplotlib  
+pip install matplotlib  
 pip install numpy  
-pip install pandas  
-pip install os  
-pip install shutil  
+pip install pandas   
 pip install joblib
+pip install flask-bcrypt
+pip install flask_login
+pip install email_validator
 ```
 This file is responsible for installing all the dependencies of the project using the pip installer that is provided with python. (for Linux)
 

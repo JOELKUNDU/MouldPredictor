@@ -19,6 +19,7 @@ Help Page
 </li>
 <li><a href="#usage">Usage</a>
 <ul>
+<li><a href="#login-and-register">Login and Register</a></li>
 <li><a href="#finding-optimal-machine-parameters-parameters">Finding optimal machine parameters parameters</a></li>
 <li><a href="#managing-the-database">Managing the database</a>
 <ul>
@@ -28,6 +29,7 @@ Help Page
 <li><a href="#deleting-the-entire-database">Deleting the entire database</a></li>
 <li><a href="#export-entire-database-as-a-csv">Export entire database as a CSV</a></li>
 <li><a href="#export-csv-format-to-add-data-to-the-database">Export CSV Format to add data to the database</a></li>
+<li><a href="#add-an-entirely-new-dataset-to-the-databse">Add an entirely new dataset to the databse</a></li>
 </ul>
 </li>
 <li><a href="#managing-the-artificial-neural-network">Managing the Artificial Neural Network</a>
@@ -86,12 +88,13 @@ pip install flask-wtf
 pip install wtforms
 pip install pyfladesk
 pip install sklearn
-pip install mathplotlib
+pip install matplotlib
 pip install numpy
 pip install pandas
-pip install os
-pip install shutil
 pip install joblib
+pip install flask-bcrypt
+pip install flask_login
+pip install email_validator
 </code></pre>
 <h2 id="download">Download</h2>
 <h5 id="option-1-">Option 1 :</h5>
@@ -135,6 +138,8 @@ or<pre><code> bash server.sh
 </li>
 </ul>
 <h2 id="usage">Usage</h2>
+<h3 id="login-and-register">Login and Register</h3>
+<p>Whenever the user starts the application he has to enter his username and password on the login page. He has to input his username and password in the ir respective fields to login. The user can user the <strong>Register</strong> button on the login page to make a new account.</p>
 <h3 id="finding-optimal-machine-parameters-parameters">Finding optimal machine parameters parameters</h3>
 <p>To find the optimal machine parameter the user has to do the following steps.</p>
 <ul>
@@ -195,6 +200,21 @@ NOTE: Please ensure there is no database.csv file on the desktop else the functi
 NOTE Please ensure there is no Format.csv file on the desktop else the function will fail.</li>
 <li>If the application is being used as a web app then the file will simply be downloaded on the client system.</li>
 </ul>
+<h4 id="add-an-entirely-new-dataset-to-the-databse">Add an entirely new dataset to the databse</h4>
+<p>To change the data that the model is being trained on the user has to follow the following steps.</p>
+<ul>
+<li>The user has to open the  <strong>Database</strong>  tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down to the bottom of the screen.</li>
+<li>The user has to click on the green button labelled <strong>EXPORT DATABASE AS CSV</strong> to make a copy of the existing database.</li>
+<li>If the user wished to remove the existing data then the user has to then click on the red button labelled <strong>WARNING: DELETE ENTIRE DATABASE</strong> else he can skip this step.</li>
+<li>The user can then add the new data using a csv file using the steps given <a href="#adding-data-entries-from-a-csv-file">here</a> or add one entry at a time using the steps given <a href="#adding-a-single-new-entry-to-the-database">here</a>.</li>
+<li>The user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen</li>
+<li>The user has to scroll down to the bottom of the screen.</li>
+<li>The user has to then click on the button labelled <strong>Auto-HyperTune the model</strong> and wait for the process to complete alternatively he can open a terminal (command prompt) in the root directory of the project and use the following command.<pre class=" language-bash"><code class="prism  language-bash">python man-hypertune.py
+</code></pre>
+</li>
+<li>The user has to then open the <strong>Database</strong>  tab from the navigation bar on the top of the screen and then go through the new database to verify all the rows have their predicted error below 10%. The user must delete all the rows that have an error of higher than 10%.</li>
+</ul>
 <h3 id="managing-the-artificial-neural-network">Managing the Artificial Neural Network</h3>
 <h4 id="understanding-the-performance-of-the-ann">Understanding the performance of the ANN</h4>
 <p>To view the performance of the ANN, the user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen. When the screen loads, The user would be presented with a scatter plot ( Predicted weights vs Actual Weights ). The closer the scatters are to the diagonal of the chart, the better is the performance of the model. Below the plot, three performance metrics are shown.</p>
@@ -205,25 +225,12 @@ NOTE Please ensure there is no Format.csv file on the desktop else the function 
 </ul>
 <p>The performance of the model can be increased by regularly retraining the ANN on the expanding database.<br>
 The performance of the model can also be increased by occasionally hypertunning the model. However significant improvement might not happen after the first few uses of this tool</p>
-<h4 id="retrain-the-model">Retrain the model</h4>
-<p>Retraining the model allows the ANN to improve its performance by learning from the new data added to the database. To retrain the ANN the user has to follow the following steps.</p>
-<ul>
-<li>The user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen</li>
-<li>The user has to scroll down to the bottom of the screen.</li>
-<li>The user has to click on the button labelled <strong>Retrain the model</strong></li>
-<li>This user can observe the process happening in the terminal window that opens along with the utility</li>
-<li><strong>NOTE</strong>: This process will take time.</li>
-</ul>
 <h4 id="hypertuning-the-model">HyperTuning the Model</h4>
 <p>Hyper-Parameter tuning allows the model to tweak its setting automatically to better perform on the given dataset. This utility is fully automatic and requires no input from the user. To HyperTune the model, the user has to follow the following steps.</p>
 <ul>
 <li>The user has to open the <strong>Model</strong> tab from the navigation bar on the top of the screen</li>
 <li>The user has to scroll down to the bottom of the screen.</li>
-<li>
-<ul>
 <li>The user has to click on the button labelled <strong>Auto-HyperTune the model</strong></li>
-</ul>
-</li>
 <li>This user can observe the process happening in the terminal window that opens along with the utility</li>
 <li><strong>NOTE</strong>: This process will take time.</li>
 </ul>
@@ -257,6 +264,10 @@ The performance of the model can also be increased by occasionally hypertunning 
 <dd><a href="https://docs.python.org/3/library/os.html">https://docs.python.org/3/library/os.html</a></dd>
 <dt>Shutil</dt>
 <dd><a href="https://docs.python.org/3/library/shutil.html">https://docs.python.org/3/library/shutil.html</a></dd>
+<dt>Flask_login</dt>
+<dd><a href="https://flask-login.readthedocs.io/en/latest/">https://flask-login.readthedocs.io/en/latest/</a></dd>
+<dt>Flask_Bcrypt</dt>
+<dd><a href="https://flask-bcrypt.readthedocs.io/en/latest/">https://flask-bcrypt.readthedocs.io/en/latest/</a></dd>
 </dl>
 <hr>
 <h3 id="python-script--database-.py">PYTHON SCRIPT : Database .py</h3>
@@ -408,7 +419,7 @@ NOTE: This function returns nothing</p>
             dataframe<span class="token punctuation">.</span>append<span class="token punctuation">(</span>data_object<span class="token punctuation">)</span>
         dataframe <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>dataframe<span class="token punctuation">)</span>
         DF <span class="token operator">=</span> pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">(</span>dataframe<span class="token punctuation">)</span>
-        DF<span class="token punctuation">.</span>to_csv<span class="token punctuation">(</span><span class="token string">'predictor/uploads/database.csv'</span><span class="token punctuation">)</span>
+        DF<span class="token punctuation">.</span>to_csv<span class="token punctuation">(</span><span class="token string">'predictor/uploads/database.csv'</span><span class="token punctuation">,</span> index<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> header<span class="token operator">=</span>headerLabels<span class="token punctuation">)</span>
         source <span class="token operator">=</span> <span class="token string">'predictor/uploads/database.csv'</span>
 	    shutil<span class="token punctuation">.</span>copyfile<span class="token punctuation">(</span>source<span class="token punctuation">,</span> dest<span class="token punctuation">)</span>
         <span class="token keyword">return</span> <span class="token boolean">True</span>
@@ -463,7 +474,7 @@ NOTE: This function returns true when successful, else it will return false</p>
     DF <span class="token operator">=</span> pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">(</span>dataframe<span class="token punctuation">)</span>
     source <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'CLIENT_CSV'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'database.csv'</span><span class="token punctuation">)</span>
     os<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>source<span class="token punctuation">)</span>
-    DF<span class="token punctuation">.</span>to_csv<span class="token punctuation">(</span>source<span class="token punctuation">)</span>
+    DF<span class="token punctuation">.</span>to_csv<span class="token punctuation">(</span>source<span class="token punctuation">,</span> index<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> header<span class="token operator">=</span>headerLabels<span class="token punctuation">)</span>
     <span class="token keyword">return</span> send_file<span class="token punctuation">(</span>source<span class="token punctuation">,</span> as_attachment<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> attachment_filename<span class="token operator">=</span><span class="token string">'database.csv'</span><span class="token punctuation">)</span>
 </code></pre>
 <p>This function converts the database to a csv file and sends it to the user when in web app mode.</p>
@@ -578,6 +589,32 @@ NOTE: In case of adding new attributes to the dataset this class has to be modif
 </code></pre>
 <p>This class defines the Auto Hyper-Tune the model button shown at the bottom of the screen of the model tab.</p>
 <p>User can refer to the functions in models .py, machine_learning .py, database .py or routes .py to understand how each of these form’s logic is implemented.</p>
+<h4 id="class-registerformflaskform">class RegisterForm(FlaskForm)</h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">class</span> <span class="token class-name">RegisterForm</span><span class="token punctuation">(</span>FlaskForm<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">validate_username</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> username_to_check<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        user <span class="token operator">=</span> User<span class="token punctuation">.</span>query<span class="token punctuation">.</span>filter_by<span class="token punctuation">(</span>username<span class="token operator">=</span>username_to_check<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span>first<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> user<span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> ValidationError<span class="token punctuation">(</span><span class="token string">'Username already exists! Please try a different username'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">validate_email_address</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> email_address_to_check<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        email_address <span class="token operator">=</span> User<span class="token punctuation">.</span>query<span class="token punctuation">.</span>filter_by<span class="token punctuation">(</span>email_address<span class="token operator">=</span>email_address_to_check<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span>first<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> email_address<span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> ValidationError<span class="token punctuation">(</span><span class="token string">'Email Address already exists! Please try a different email address'</span><span class="token punctuation">)</span>
+
+    username <span class="token operator">=</span> StringField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'User Name:'</span><span class="token punctuation">,</span> validators<span class="token operator">=</span><span class="token punctuation">[</span>Length<span class="token punctuation">(</span><span class="token builtin">min</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span> DataRequired<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    email_address <span class="token operator">=</span> StringField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'Email Address:'</span><span class="token punctuation">,</span> validators<span class="token operator">=</span><span class="token punctuation">[</span>Email<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> DataRequired<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    password1 <span class="token operator">=</span> PasswordField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'Password:'</span><span class="token punctuation">,</span> validators<span class="token operator">=</span><span class="token punctuation">[</span>Length<span class="token punctuation">(</span><span class="token builtin">min</span><span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span> DataRequired<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    password2 <span class="token operator">=</span> PasswordField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'Confirm Password:'</span><span class="token punctuation">,</span> validators<span class="token operator">=</span><span class="token punctuation">[</span>EqualTo<span class="token punctuation">(</span><span class="token string">'password1'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> DataRequired<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    submit <span class="token operator">=</span> SubmitField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'Create Account'</span><span class="token punctuation">)</span>
+</code></pre>
+<p>This class defines the Register form that the user uses to create a new account in the system.</p>
+<h4 id="class-loginformflaskform">class LoginForm(FlaskForm)</h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">class</span> <span class="token class-name">LoginForm</span><span class="token punctuation">(</span>FlaskForm<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    username <span class="token operator">=</span> StringField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'User Name:'</span><span class="token punctuation">,</span> validators<span class="token operator">=</span><span class="token punctuation">[</span>DataRequired<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    password <span class="token operator">=</span> PasswordField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'Password:'</span><span class="token punctuation">,</span> validators<span class="token operator">=</span><span class="token punctuation">[</span>DataRequired<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    submit <span class="token operator">=</span> SubmitField<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'Sign in'</span><span class="token punctuation">)</span>
+</code></pre>
+<p>This class defines the Login form that the user uses to login.</p>
 <hr>
 <h3 id="python-script-machine_learning-.py">PYTHON SCRIPT: Machine_learning .py</h3>
 <p>This script implements all the functions that enable machine learning aspects of the utility. Detailed documentation about the scikit-learn library can be found <a href="https://scikit-learn.org/stable/">here</a>.</p>
@@ -602,8 +639,6 @@ NOTE: In case of adding new attributes to the dataset this class has to be modif
         self<span class="token punctuation">.</span>absolute_mean_error <span class="token operator">=</span> perf<span class="token punctuation">.</span>absolute_mean_error
         self<span class="token punctuation">.</span>modelScore <span class="token operator">=</span> perf<span class="token punctuation">.</span>model_score
         self<span class="token punctuation">.</span>max_error <span class="token operator">=</span> perf<span class="token punctuation">.</span>max_error
-        self<span class="token punctuation">.</span>printMetric<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
 
 ml_metrics <span class="token operator">=</span> ModelMetrics<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
@@ -672,8 +707,27 @@ details of which can be found <a href="https://scikit-learn.org/stable/modules/g
     clf<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\n\n\nBEST PARAMS'</span><span class="token punctuation">,</span> clf<span class="token punctuation">.</span>best_params_<span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\n\n\nResults'</span><span class="token punctuation">,</span> clf<span class="token punctuation">.</span>cv_results_<span class="token punctuation">)</span>
-    jl<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>clf<span class="token punctuation">,</span> <span class="token string">'predictor/static/ML/config.joblib'</span><span class="token punctuation">)</span>
-    retrain<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	pred <span class="token operator">=</span> clf<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>X_test<span class="token punctuation">)</span>
+
+	ml_metrics<span class="token punctuation">.</span>absolute_mean_error <span class="token operator">=</span> metrics<span class="token punctuation">.</span>mean_absolute_error<span class="token punctuation">(</span>y_test<span class="token punctuation">,</span> pred<span class="token punctuation">)</span>
+	ml_metrics<span class="token punctuation">.</span>modelScore <span class="token operator">=</span> getScore<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	ml_metrics<span class="token punctuation">.</span>max_error <span class="token operator">=</span> metrics<span class="token punctuation">.</span>max_error<span class="token punctuation">(</span>y_test<span class="token punctuation">,</span> pred<span class="token punctuation">)</span>
+	ml_metrics<span class="token punctuation">.</span>savePerformance<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	pred <span class="token operator">=</span> clf<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+
+	<span class="token comment"># Preparing the scatter plot of the model's prediction  </span>
+	plt<span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>y<span class="token punctuation">,</span> pred<span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'b'</span><span class="token punctuation">)</span>
+	plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">'Actual Weight'</span><span class="token punctuation">)</span>
+	plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">'Predicted Weight'</span><span class="token punctuation">)</span>
+	plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Scatter Plot (Actual vs Predicted Part Weight)'</span><span class="token punctuation">)</span>
+	<span class="token comment"># save the plot  </span>
+	plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">'predictor/static/ML/performance.png'</span><span class="token punctuation">,</span> bbox_inches<span class="token operator">=</span><span class="token string">'tight'</span><span class="token punctuation">)</span>
+	ml_metrics<span class="token punctuation">.</span>loadPerformance<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span><span class="token string">'predictor/static/ML/config.joblib'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	    os<span class="token punctuation">.</span>remove<span class="token punctuation">(</span><span class="token string">'predictor/static/ML/config.joblib'</span><span class="token punctuation">)</span>
+	jl<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>clf<span class="token punctuation">,</span> <span class="token string">'predictor/static/ML/config.joblib'</span><span class="token punctuation">)</span>
 </code></pre>
 <p>This function uses <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html?highlight=randomized#sklearn.model_selection.RandomizedSearchCV">RandomizedSearchCV</a> from scikit learn library to set the optimal parameters for the ANN. Since the method is randomized a few executions of this method might be required before optimal parameters can be set. This function is also responsible for saving the optimized model for later use. This is implemented using the joblib library</p>
 <h4 id="def-mlprmodelx_test">def MLPRmodel(X_test)</h4>
@@ -726,7 +780,7 @@ details of which can be found <a href="https://scikit-learn.org/stable/modules/g
 
     trained_model <span class="token operator">=</span> jl<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token string">'predictor/static/ML/config.joblib'</span><span class="token punctuation">)</span>
 
-    trained_model<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span>
+    trained_model<span class="token punctuation">.</span>partial_fit<span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span>
     pred <span class="token operator">=</span> trained_model<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>X_test<span class="token punctuation">)</span>
 
     ml_metrics<span class="token punctuation">.</span>absolute_mean_error <span class="token operator">=</span> metrics<span class="token punctuation">.</span>mean_absolute_error<span class="token punctuation">(</span>y_test<span class="token punctuation">,</span> pred<span class="token punctuation">)</span>
@@ -758,7 +812,8 @@ details of which can be found <a href="https://scikit-learn.org/stable/modules/g
 		  Mould_SA<span class="token punctuation">,</span> Mould_vol<span class="token punctuation">,</span> Cavity_SA<span class="token punctuation">,</span> Cavity_vol<span class="token punctuation">,</span>
 		  Melt_temp<span class="token punctuation">,</span> Mat_density<span class="token punctuation">,</span> Mat_GF<span class="token punctuation">,</span> Mat_MMFR<span class="token punctuation">]</span><span class="token punctuation">]</span>
     pred <span class="token operator">=</span> trained_model<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
-    <span class="token keyword">return</span> pred<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+	pred<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">abs</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>pred<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">-</span>part_weight<span class="token punctuation">)</span><span class="token operator">/</span>part_weight<span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">100</span><span class="token punctuation">)</span>
+	<span class="token keyword">return</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">round</span><span class="token punctuation">(</span>pred<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre>
 <p>This functions takes the values from the variables in the parameter list, converts them into a list that can be passed into the model. It then loads the model and passes the previously created list to get one prediction. The function then returns this prediction.</p>
 <h4 id="def-predict-fill_time_min-fill_time_max-fill_time_res-injection_pres_min-injection_pres_max-injection_pres_res--holding_pres_min-holding_pres_max-holding_pres_res--holding_time_min-holding_time_max-holding_time_res--cooling_time_min-cooling_time_max-cooling_time_res--mould_temp-clamp_force-shot_weight--mould_sa-mould_vol-cavity_sa-cavity_vol--mat_density-melt_temp-mat_gf-mat_mmfr">def predict (Fill_time_min, Fill_time_max, Fill_time_res, Injection_pres_min, Injection_pres_max, Injection_pres_res,  Holding_pres_min, Holding_pres_max, Holding_pres_res,  Holding_time_min, Holding_time_max, Holding_time_res,  Cooling_time_min, Cooling_time_max, Cooling_time_res,  Mould_temp, Clamp_force, Shot_Weight,  Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,  Mat_density, Melt_temp, Mat_GF, Mat_MMFR)</h4>
@@ -873,6 +928,25 @@ details of which can be found <a href="https://scikit-learn.org/stable/modules/g
 <dt>def save(self)</dt>
 <dd>This deletes the presently stored metric and saves the new metrics save in the object in the database.</dd>
 </dl>
+<h4 id="class-userdb.model">class User(db.Model)</h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>Model<span class="token punctuation">,</span> UserMixin<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token builtin">id</span> <span class="token operator">=</span> db<span class="token punctuation">.</span>Column<span class="token punctuation">(</span>db<span class="token punctuation">.</span>Integer<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> primary_key<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    username <span class="token operator">=</span> db<span class="token punctuation">.</span>Column<span class="token punctuation">(</span>db<span class="token punctuation">.</span>String<span class="token punctuation">(</span>length<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span> nullable<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> unique<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    email_address <span class="token operator">=</span> db<span class="token punctuation">.</span>Column<span class="token punctuation">(</span>db<span class="token punctuation">.</span>String<span class="token punctuation">(</span>length<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span> nullable<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> unique<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    password_hash <span class="token operator">=</span> db<span class="token punctuation">.</span>Column<span class="token punctuation">(</span>db<span class="token punctuation">.</span>String<span class="token punctuation">(</span>length<span class="token operator">=</span><span class="token number">60</span><span class="token punctuation">)</span><span class="token punctuation">,</span> nullable<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+
+	@<span class="token builtin">property</span>
+	<span class="token keyword">def</span> <span class="token function">password</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	    <span class="token keyword">return</span> self<span class="token punctuation">.</span>password
+
+	@password<span class="token punctuation">.</span>setter
+	<span class="token keyword">def</span> <span class="token function">password</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> plain_text_password<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	    self<span class="token punctuation">.</span>password_hash <span class="token operator">=</span> bcrypt<span class="token punctuation">.</span>generate_password_hash<span class="token punctuation">(</span>plain_text_password<span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">check_password_correction</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> attempted_password<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> bcrypt<span class="token punctuation">.</span>check_password_hash<span class="token punctuation">(</span>self<span class="token punctuation">.</span>password_hash<span class="token punctuation">,</span> attempted_password<span class="token punctuation">)</span>
+</code></pre>
+<p>This class defines the user table stored in the database and the is used by flask login manager to authenticate the session.</p>
 <hr>
 <h3 id="python-script-routes-.py">PYTHON SCRIPT: Routes .py</h3>
 <p>This script handles the app routing for the Flask App. App routing is used to map the specific URL with the associated function that is intended to perform some task. It is used to access some particular page like the predict page or the database page.</p>
@@ -1103,6 +1177,52 @@ details of which can be found <a href="https://scikit-learn.org/stable/modules/g
     <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'help.html'</span><span class="token punctuation">)</span>
 </code></pre>
 <p>This function is responsible for rendering the main landing page of the app.</p>
+<h4 id="def-register_page">def register_page()</h4>
+<pre class=" language-python"><code class="prism  language-python">@app<span class="token punctuation">.</span>route<span class="token punctuation">(</span><span class="token string">'/register'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">register_page</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    form <span class="token operator">=</span> RegisterForm<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> form<span class="token punctuation">.</span>validate_on_submit<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        user_to_create <span class="token operator">=</span> User<span class="token punctuation">(</span>username<span class="token operator">=</span>form<span class="token punctuation">.</span>username<span class="token punctuation">.</span>data<span class="token punctuation">,</span>
+							  email_address<span class="token operator">=</span>form<span class="token punctuation">.</span>email_address<span class="token punctuation">.</span>data<span class="token punctuation">,</span>
+							  password<span class="token operator">=</span>form<span class="token punctuation">.</span>password1<span class="token punctuation">.</span>data<span class="token punctuation">)</span>
+        db<span class="token punctuation">.</span>session<span class="token punctuation">.</span>add<span class="token punctuation">(</span>user_to_create<span class="token punctuation">)</span>
+        db<span class="token punctuation">.</span>session<span class="token punctuation">.</span>commit<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        login_user<span class="token punctuation">(</span>user_to_create<span class="token punctuation">)</span>
+        flash<span class="token punctuation">(</span>f<span class="token string">"Account created successfully! You are now logged in as {user_to_create.username}"</span><span class="token punctuation">,</span> category<span class="token operator">=</span><span class="token string">'success'</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> redirect<span class="token punctuation">(</span>url_for<span class="token punctuation">(</span><span class="token string">'main_page'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> form<span class="token punctuation">.</span>errors <span class="token operator">!=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> err_msg <span class="token keyword">in</span> form<span class="token punctuation">.</span>errors<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            flash<span class="token punctuation">(</span>f<span class="token string">'There was an error with creating a user: {err_msg}'</span><span class="token punctuation">,</span> category<span class="token operator">=</span><span class="token string">'danger'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'register.html'</span><span class="token punctuation">,</span> form<span class="token operator">=</span>form<span class="token punctuation">)</span>
+</code></pre>
+<p>This function is responsible for rendering the user registeration page.</p>
+<h4 id="section"></h4>
+<pre class=" language-python"><code class="prism  language-python">@app<span class="token punctuation">.</span>route<span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">login_page</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    form <span class="token operator">=</span> LoginForm<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> form<span class="token punctuation">.</span>validate_on_submit<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        attempted_user <span class="token operator">=</span> User<span class="token punctuation">.</span>query<span class="token punctuation">.</span>filter_by<span class="token punctuation">(</span>username<span class="token operator">=</span>form<span class="token punctuation">.</span>username<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span>first<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> attempted_user <span class="token operator">and</span> attempted_user<span class="token punctuation">.</span>check_password_correction<span class="token punctuation">(</span>
+                attempted_password<span class="token operator">=</span>form<span class="token punctuation">.</span>password<span class="token punctuation">.</span>data
+        <span class="token punctuation">)</span><span class="token punctuation">:</span>
+            login_user<span class="token punctuation">(</span>attempted_user<span class="token punctuation">)</span>
+            flash<span class="token punctuation">(</span>f<span class="token string">'Success! You are logged in as: {attempted_user.username}'</span><span class="token punctuation">,</span> category<span class="token operator">=</span><span class="token string">'success'</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> redirect<span class="token punctuation">(</span>url_for<span class="token punctuation">(</span><span class="token string">'market_page'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            flash<span class="token punctuation">(</span><span class="token string">'Username and password are not match! Please try again'</span><span class="token punctuation">,</span> category<span class="token operator">=</span><span class="token string">'danger'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'login.html'</span><span class="token punctuation">,</span> form<span class="token operator">=</span>form<span class="token punctuation">)</span>
+</code></pre>
+<p>This function is responsible for rendering the login in page.</p>
+<h4 id="def-logout_page">def logout_page()</h4>
+<pre class=" language-python"><code class="prism  language-python">@app<span class="token punctuation">.</span>route<span class="token punctuation">(</span><span class="token string">'/logout'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">logout_page</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    logout_user<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    flash<span class="token punctuation">(</span><span class="token string">"You have been logged out!"</span><span class="token punctuation">,</span> category<span class="token operator">=</span><span class="token string">'info'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> redirect<span class="token punctuation">(</span>url_for<span class="token punctuation">(</span><span class="token string">"home_page"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>This function is responsible for logging out the user.</p>
 <hr>
 <h3 id="python-script--ui-.py">PYTHON SCRIPT : UI .py</h3>
 <pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> sys
@@ -1222,12 +1342,22 @@ data <span class="token operator">=</span> json<span class="token punctuation">.
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">" * Running in SERVER MODE"</span><span class="token punctuation">)</span>
     state<span class="token punctuation">.</span>serverModeOn<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
+app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'SEND_FILE_MAX_AGE_DEFAULT'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
 app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'SQLALCHEMY_DATABASE_URI'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'sqlite:///data.db'</span>
 app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'SECRET_KEY'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'9a257ea9a3b0b646c25ec6f8'</span>
 app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'SQLALCHEMY_TRACK_MODIFICATIONS'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">True</span>
 app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'CLIENT_CSV'</span><span class="token punctuation">]</span> <span class="token operator">=</span> clientCSVPath
 app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'UPLOADS'</span><span class="token punctuation">]</span> <span class="token operator">=</span> clientUploadPath
 db <span class="token operator">=</span> SQLAlchemy<span class="token punctuation">(</span>app<span class="token punctuation">)</span>
+
+
+@app<span class="token punctuation">.</span>after_request
+<span class="token keyword">def</span> <span class="token function">add_header</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># response.cache_control.no_store = True  </span>
+  response<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'Cache-Control'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'</span>
+  response<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'Pragma'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'no-cache'</span>
+  response<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'Expires'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'-1'</span>
+  <span class="token keyword">return</span> response
 
 
 <span class="token keyword">from</span> predictor <span class="token keyword">import</span> routes
@@ -1328,18 +1458,19 @@ trained_model <span class="token operator">=</span> jl<span class="token punctua
 <p>This script will automatically optimize and retrain the stored model on the dataset stored in the database without opening the app. This script uses GridSearchCV hence takes longer than the RandomizedSearchCV function used by the Auto-HyperTune function. However, this script will optimize the model the best performing configuration in a single execution.</p>
 <hr>
 <h3 id="batch-script-get-dependencies-.bat">BATCH SCRIPT Get-Dependencies .bat</h3>
-<pre class=" language-batch"><code class="prism  language-batch"><span class="token command"><span class="token keyword">pip</span> install flask  </span>
+<pre class=" language-batch"><code class="prism  language-batch"><span class="token command"><span class="token keyword">pip</span> install flask   </span>
 <span class="token command"><span class="token keyword">pip</span> install flask-sqlalchemy  </span>
 <span class="token command"><span class="token keyword">pip</span> install flask-wtf  </span>
 <span class="token command"><span class="token keyword">pip</span> install wtforms  </span>
 <span class="token command"><span class="token keyword">pip</span> install pyfladesk  </span>
 <span class="token command"><span class="token keyword">pip</span> install sklearn  </span>
-<span class="token command"><span class="token keyword">pip</span> install mathplotlib  </span>
+<span class="token command"><span class="token keyword">pip</span> install matplotlib  </span>
 <span class="token command"><span class="token keyword">pip</span> install numpy  </span>
-<span class="token command"><span class="token keyword">pip</span> install pandas  </span>
-<span class="token command"><span class="token keyword">pip</span> install os  </span>
-<span class="token command"><span class="token keyword">pip</span> install shutil  </span>
+<span class="token command"><span class="token keyword">pip</span> install pandas   </span>
 <span class="token command"><span class="token keyword">pip</span> install joblib</span>
+<span class="token command"><span class="token keyword">pip</span> install flask-bcrypt</span>
+<span class="token command"><span class="token keyword">pip</span> install flask_login</span>
+<span class="token command"><span class="token keyword">pip</span> install email_validator</span>
 </code></pre>
 <p>This file is responsible for installing all the dependencies of the project using the pip installer that is provided with python. (for Windows)</p>
 <h3 id="shell-script-get-dependencies-.sh">SHELL SCRIPT Get-Dependencies .sh</h3>
@@ -1350,12 +1481,13 @@ pip <span class="token function">install</span> flask-wtf
 pip <span class="token function">install</span> wtforms
 pip <span class="token function">install</span> pyfladesk
 pip <span class="token function">install</span> sklearn
-pip <span class="token function">install</span> mathplotlib
+pip <span class="token function">install</span> matplotlib
 pip <span class="token function">install</span> numpy
 pip <span class="token function">install</span> pandas
-pip <span class="token function">install</span> os
-pip <span class="token function">install</span> shutil
 pip <span class="token function">install</span> joblib
+pip <span class="token function">install</span> flask-bcrypt
+pip <span class="token function">install</span> flask_login
+pip <span class="token function">install</span> email_validator
 </code></pre>
 <p>This file is responsible for installing all the dependencies of the project using the pip installer that is provided with python. (for Linux)</p>
 <h3 id="c-file-source.cpp">C++ FILE source.cpp</h3>

@@ -7,6 +7,11 @@ from predictor import app
 from flask import send_from_directory, send_file
 
 
+headerLabels = ['Fill Time s','Injection Pressure (MPa)','Holding Pressure MPa','Holding Time s','Total Pack s',
+                'Mould Temp C','Clamp Force Ton','Shot Weight','Mould SA','Mould Vol','Cavity SA','Cavity Vol',
+                'Melt Temp C','Mat Density','GF%','MMFR','Weight']
+
+
 def serverExportCSV():
     entries = Mould.query.all()
     dataframe = []
@@ -38,7 +43,7 @@ def serverExportCSV():
     DF = pd.DataFrame(dataframe)
     source = os.path.join(app.config['CLIENT_CSV'],  'database.csv')
     os.remove(source)
-    DF.to_csv(source)
+    DF.to_csv(source, index=False, header=headerLabels)
     return send_file(source, as_attachment=True, attachment_filename='database.csv')
 
 
@@ -190,8 +195,7 @@ def exportCSV():
             dataframe.append(data_object)
         dataframe = np.array(dataframe)
         DF = pd.DataFrame(dataframe)
-        DF.to_csv('predictor/static/client/csv/database.csv')
+        DF.to_csv('predictor/static/client/csv/database.csv', index=False, header=headerLabels)
         source = 'predictor/static/client/csv/database.csv'
         shutil.copyfile(source, dest)
         return True
-

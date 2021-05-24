@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ML Mould Predictor</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}" /> </head>
+	<link rel="icon" href="{{ url_for('static', filename='resources/logo.png') }}">
+</head>
+<body>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+		<ul class=flashes>
+		{% for category, message in messages %}
+		<div class="alert-body">
+			<div class="alert {{ category }}">
+			<input type="checkbox" id="alert1">
+			<label class="close" title="close" for="alert1">
+			  <i class="icon-remove"></i>
+			</label>
+				<p class="inner">
+					<strong>ALERT: </strong> {{ message }}
+				</p>
+		  </div>
+		</div>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+<div>
+	<section class="Banner center dark1">
+		<h1>MOULD PARAMETER PREDICTOR</h1>
+            <div class="form-div2">
+            <form method="POST" class="form" style="color:white">
+            {{ form.hidden_tag() }}
+            <h2>
+                Please Create your Account
+            </h2>
+            <br>
+            <div class="form-block">
+                {{ form.username.label() }}
+                {{ form.username(class="form-input", placeholder="User Name") }}
+            </div>
+            <br>
+            <div class="form-block">
+                {{ form.email_address.label() }}
+                {{ form.email_address(class="form-input", placeholder="Email Address") }}
+            </div>
+            <br>
+            <div class="form-block">
+                {{ form.password1.label() }}
+                {{ form.password1(class="form-input", placeholder="Password") }}
+            </div>
+            <br>
+            <div class="form-block">
+                {{ form.password2.label() }}
+                {{ form.password2(class="form-input", placeholder="Confirm Password") }}
+            </div>
+                <br>
+            <div class="form-block">
+                 {{ form.submit(class="normal-btn") }}
+            </div>
+
+
+            <div class="form-block">
+                <h4>Already have an account?</h4>
+               <a class="normal-btn" href="{{ url_for('login_page') }}">Login</a>
+            </div>
+
+
+        </form>
+        </div>
+</section>
+</div>
+</body>
+
+</html>
+

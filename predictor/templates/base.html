@@ -6,6 +6,7 @@
 	<title> {% block title %} {% endblock %} </title>
 	<link rel="icon" href="{{ url_for('static', filename='resources/logo.png') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 </head>
 <body>
 	<nav>
@@ -33,6 +34,11 @@
 			<li>
 				<a href="{{ url_for( 'help_page' ) }}">
 					<button class="normal-btn"> Help </button>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for( 'logout_page' ) }}">
+					<button class="normal-btn"> Logout </button>
 				</a>
 			</li>
 		</ul>

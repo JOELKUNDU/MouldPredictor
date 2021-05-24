@@ -60,7 +60,7 @@ a{
 }
 .form-div2 {
     display:flex;
-    width:50%;
+    width:100%;
     flex-wrap: wrap;
     align-content: stretch;
     border: 1px solid #353535;

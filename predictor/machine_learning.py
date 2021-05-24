@@ -32,7 +32,6 @@ class ModelMetrics:
         self.absolute_mean_error = perf.absolute_mean_error
         self.modelScore = perf.model_score
         self.max_error = perf.max_error
-        self.printMetric()
 
 
 ml_metrics = ModelMetrics()
@@ -64,7 +63,7 @@ def hyperTune():
                                0.009, 0.09, 0.9, 0.0009],
         'random_state': [1399],
         'warm_start': [True],
-        'max_iter': [100000, 75000, 125000],
+        'max_iter': [100000, 75000, 125000, 250000, 350000, 500000],
         'verbose': [True]
     }
     trained_model = MLPRegressor()
@@ -74,8 +73,25 @@ def hyperTune():
     clf.fit(X, y)
     print('\n\n\nBEST PARAMS', clf.best_params_)
     print('\n\n\nResults', clf.cv_results_)
+
+    pred = clf.predict(X_test)
+
+    ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)
+    ml_metrics.modelScore = getScore()
+    ml_metrics.max_error = metrics.max_error(y_test, pred)
+    ml_metrics.savePerformance()
+
+    pred = clf.predict(X)
+
+    # Preparing the scatter plot of the model's prediction
+    plt.scatter(y, pred, color='b')
+    plt.xlabel('Actual Weight')
+    plt.ylabel('Predicted Weight')
+    plt.title('Scatter Plot (Actual vs Predicted Part Weight)')
+    # save the plot
+    plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')
+    ml_metrics.loadPerformance()
     jl.dump(clf, 'predictor/static/ML/config.joblib')
-    retrain()
 
 
 def MLPRmodel(X_test):
@@ -123,7 +139,7 @@ def retrain():
 
     trained_model = jl.load('predictor/static/ML/config.joblib')
 
-    trained_model.fit(X_train, y_train)
+    trained_model.partial_fit(X_train, y_train)
     pred = trained_model.predict(X_test)
 
     ml_metrics.absolute_mean_error = metrics.mean_absolute_error(y_test, pred)
@@ -146,7 +162,7 @@ def retrain():
 def getPredict(Fill_time, Injection_pres, Holding_pres, Holding_time, Cooling_time,
                Mould_temp, Clamp_force, Shot_Weight,
                Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,
-               Melt_temp, Mat_density, Mat_GF, Mat_MMFR):
+               Melt_temp, Mat_density, Mat_GF, Mat_MMFR, part_weight):
     init_load_up()
     trained_model = jl.load('predictor/static/ML/config.joblib')
     X = [[Fill_time, Injection_pres, Holding_pres, Holding_time, Cooling_time,
@@ -154,7 +170,8 @@ def getPredict(Fill_time, Injection_pres, Holding_pres, Holding_time, Cooling_ti
           Mould_SA, Mould_vol, Cavity_SA, Cavity_vol,
           Melt_temp, Mat_density, Mat_GF, Mat_MMFR]]
     pred = trained_model.predict(X)
-    return pred[0]
+    pred[0] = abs(((pred[0]-part_weight)/part_weight)*100)
+    return str(round(pred[0], 3))
 
 
 def predict(

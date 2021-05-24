@@ -33,6 +33,7 @@ Model Information
         </div>
     </section>
     <section class="form-body dark2">
+		<!--
 		<div class="form-div2">
 			<form method="POST" class="form">
 				{{RetrainModel.hidden_tag()}}
@@ -41,10 +42,12 @@ Model Information
                     <h5>NOTE: This might take a very long time</h5>
 				</div>
 				<div class="form-row2">
-					<input id="Retrain-model" name="Retrain-model" type="hidden" value="True"> {{ RetrainModel.submit(class = "normal-btn") }}
+					<input id="Retrain-model" name="Retrain-model" type="hidden" value="True" onclick="$('#loading').show();"> {{ RetrainModel.submit(class = "normal-btn") }}
 				</div>
+				<div id="loading" style="display:none;"><img src="{{ url_for('static', filename='resources/loading.gif') }}" alt="" />Loading!</div>
 			</form>
 		</div>
+		-->
         <div class="form-div2">
 			<form method="POST" class="form">
 				{{HyperTuneModel.hidden_tag()}}
@@ -53,9 +56,10 @@ Model Information
                     <h5>NOTE: This might take a very long time</h5>
 				</div>
 				<div class="form-row2">
-					<input id="HyperTune-model" name="HyperTune-model" type="hidden" value="True"> {{ HyperTuneModel.submit(class = "normal-btn") }}
+					<input id="HyperTune-model" name="HyperTune-model" type="hidden" value="True" onclick="$('#loading').show();"> {{ HyperTuneModel.submit(class = "normal-btn") }}
 				</div>
 			</form>
+			<div id="loading2" style="display:none;"><img src="{{ url_for('static', filename='resources/loading.gif') }}" alt="" />Loading!</div>
 		</div>
 	</section>
 </div>

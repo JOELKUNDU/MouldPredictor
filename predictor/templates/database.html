@@ -121,6 +121,7 @@
 						<th scope="col">Material Glass %</th>
 						<th scope="col">Material Melt Mass Flow Rate</th>
 						<th scope="col">Part Weight</th>
+						<th scope="col">Predicted Error</th>
 						<th scope="col">Delete?</th>
 					</tr>
 				</thead>
@@ -143,9 +144,10 @@
 						<td>{{ entry.mat_density }}</td>
 						<td>{{ entry.mat_GF }}</td>
 						<td>{{ entry.mat_MMFR }}</td>
-
 						<td>{{ entry.part_weight }}</td>
-
+						<td>
+							{{ getPredict(entry.fill_time,entry.injection_pres,entry.holding_pres,entry.holding_time,entry.cooling_time,entry.mould_temp, entry.clamp_force, entry.shot_weight, entry.mould_SA, entry.mould_vol, entry.cavity_SA, entry.cavity_vol, entry.melt_temp, entry.mat_density, entry.mat_GF, entry.mat_MMFR, entry.part_weight ) }} %
+						</td>
 						<td>
 							<form method="POST"> {{ DeleteEntryForm.hidden_tag() }}
 								<input id="deleted_entry" name="deleted_entry" type="hidden" value="{{entry.id}}"> {{ DeleteEntryForm.submit(class="red-btn2") }} </form>

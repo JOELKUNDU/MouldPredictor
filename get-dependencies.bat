@@ -1,16 +1,14 @@
-pip install flask 
+pip install flask
 pip install flask-sqlalchemy
 pip install flask-wtf
 pip install wtforms
 pip install pyfladesk
 pip install sklearn
-pip install mathplotlib
+pip install matplotlib
 pip install numpy
 pip install pandas
-pip install os 
-pip install shutil
 pip install joblib
-
-
-
+pip install flask-bcrypt
+pip install flask_login
+pip install email_validator
 

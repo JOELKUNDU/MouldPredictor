@@ -1,13 +1,14 @@
-from predictor import app, state
+from predictor import app, state, db
 from flask import render_template, request, redirect, url_for, flash
 from predictor.forms import PredictForm, AddEntryForm, DeleteEntryForm, AddEntryCSV, DeleteAllEntries,\
-    ExportAllEntries, RetrainModel, HyperTuneModel, GetCSVFormatForm
+    ExportAllEntries, RetrainModel, HyperTuneModel, GetCSVFormatForm, RegisterForm, LoginForm
 from predictor.database import add_from_csv, purge, exportCSV, exportCSVFormat, serverExportCSV, serverExportCSVFormat
-from predictor.models import Mould
+from predictor.models import Mould, User
 import predictor.machine_learning as ml
 import numpy as np
 from werkzeug.utils import secure_filename
 import os
+from flask_login import login_user, logout_user, login_required
 
 
 @app.route('/')
@@ -17,11 +18,13 @@ def home_page():
 
 
 @app.route('/main-page')
+@login_required
 def main_page():
     return render_template('main.html')
 
 
 @app.route('/predict-page', methods=['GET', 'POST'])
+@login_required
 def predict_page():
     predict_form = PredictForm()
     output = np.zeros(shape=10)
@@ -74,6 +77,7 @@ def predict_page():
 
 
 @app.route('/model-page', methods=['POST', 'GET'])
+@login_required
 def model_page():
     ml.init_load_up()
     retrainmodel = RetrainModel()
@@ -116,6 +120,7 @@ app.jinja_env.globals.update(getPredict=ml.getPredict)
 
 
 @app.route('/database-page', methods=['GET', 'POST'])
+@login_required
 def database_page():
     addentryform = AddEntryForm()
     addentrycsv = AddEntryCSV()
@@ -229,8 +234,52 @@ def database_page():
 
 
 @app.route('/help-page')
+@login_required
 def help_page():
     return render_template('help.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register_page():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user_to_create = User(username=form.username.data,
+                              email_address=form.email_address.data,
+                              password=form.password1.data)
+        db.session.add(user_to_create)
+        db.session.commit()
+        login_user(user_to_create)
+        flash(f"Account created successfully! You are now logged in as {user_to_create.username}", category='success')
+        return redirect(url_for('main_page'))
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            flash(f'There was an error with creating a user: {err_msg}', category='danger')
+
+    return render_template('register.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    form = LoginForm()
+    if form.validate_on_submit():
+        attempted_user = User.query.filter_by(username=form.username.data).first()
+        if attempted_user and attempted_user.check_password_correction(
+                attempted_password=form.password.data
+        ):
+            login_user(attempted_user)
+            flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
+            return redirect(url_for('main_page'))
+        else:
+            flash('Username and password are not match! Please try again', category='danger')
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout_page():
+    logout_user()
+    flash("You have been logged out!", category='info')
+    return redirect(url_for("home_page"))
 
 
 
