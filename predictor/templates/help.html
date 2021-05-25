@@ -92,13 +92,13 @@ pip install matplotlib
 pip install numpy
 pip install pandas
 pip install joblib
-pip install flask_bcrypt
+pip install flask-bcrypt
 pip install flask_login
 pip install email_validator
 </code></pre>
 <h2 id="download">Download</h2>
 <h5 id="option-1-">Option 1 :</h5>
-<p>Users can download the archive from <a href="https://github.com/JOELKUNDU/MouldPredictor/releases">here</a>.</p>
+<p>Users can download the latest release from <a href="https://github.com/JOELKUNDU/MouldPredictor/releases">here</a>.</p>
 <h5 id="option-2">Option 2:</h5>
 <p>Users can clone this repository using <strong>git</strong>, using the following commands.</p>
 <pre><code>git clone https://github.com/JOELKUNDU/MouldPredictor.git
@@ -278,7 +278,9 @@ The performance of the model can also be increased by occasionally hypertunning 
         dataframe <span class="token operator">=</span> np<span class="token punctuation">.</span>genfromtxt<span class="token punctuation">(</span>filepath<span class="token punctuation">,</span> delimiter<span class="token operator">=</span><span class="token string">','</span><span class="token punctuation">)</span>
         dataframe <span class="token operator">=</span> np<span class="token punctuation">.</span>delete<span class="token punctuation">(</span>dataframe<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
         rows <span class="token operator">=</span> dataframe<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
-        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> rows<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        count <span class="token operator">=</span> <span class="token number">0</span>
+		zeroCount <span class="token operator">=</span> <span class="token number">0</span>
+		<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> rows<span class="token punctuation">)</span><span class="token punctuation">:</span>
             fill_time <span class="token operator">=</span> dataframe<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
             injection_pres <span class="token operator">=</span> dataframe<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
             holding_pres <span class="token operator">=</span> dataframe<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
@@ -299,7 +301,9 @@ The performance of the model can also be increased by occasionally hypertunning 
             mat_GF <span class="token operator">=</span> dataframe<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">14</span><span class="token punctuation">]</span>
             mat_MMFR <span class="token operator">=</span> dataframe<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span>
             part_weight <span class="token operator">=</span> dataframe<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span>
-            entry_to_create <span class="token operator">=</span> Mould<span class="token punctuation">(</span>
+            <span class="token keyword">if</span> <span class="token number">0</span> <span class="token keyword">in</span> <span class="token punctuation">[</span>fill_time<span class="token punctuation">,</span> injection_pres<span class="token punctuation">,</span> holding_pres<span class="token punctuation">,</span> holding_time<span class="token punctuation">,</span> cooling_time<span class="token punctuation">,</span> mould_temp<span class="token punctuation">,</span> clamp_force<span class="token punctuation">,</span> shot_weight<span class="token punctuation">,</span> mould_SA<span class="token punctuation">,</span> mould_vol<span class="token punctuation">,</span> cavity_SA<span class="token punctuation">,</span> cavity_vol<span class="token punctuation">,</span> melt_temp<span class="token punctuation">,</span> mat_density<span class="token punctuation">,</span> mat_GF<span class="token punctuation">,</span> mat_MMFR<span class="token punctuation">,</span> part_weight<span class="token punctuation">]</span><span class="token punctuation">:</span>
+                zeroCount <span class="token operator">=</span> zeroCount <span class="token operator">+</span> <span class="token number">1</span>
+			entry_to_create <span class="token operator">=</span> Mould<span class="token punctuation">(</span>
 									fill_time<span class="token operator">=</span>fill_time<span class="token punctuation">,</span>
 									injection_pres<span class="token operator">=</span>injection_pres<span class="token punctuation">,</span>
 									holding_pres<span class="token operator">=</span>holding_pres<span class="token punctuation">,</span>
@@ -318,8 +322,33 @@ The performance of the model can also be increased by occasionally hypertunning 
 									mat_MMFR<span class="token operator">=</span>mat_MMFR<span class="token punctuation">,</span>
 									part_weight<span class="token operator">=</span>part_weight<span class="token punctuation">,</span>
 									<span class="token punctuation">)</span>
-            entry_to_create<span class="token punctuation">.</span>add_self<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        flash<span class="token punctuation">(</span><span class="token string">'CSV dataset added successfully'</span><span class="token punctuation">,</span> <span class="token string">'success'</span><span class="token punctuation">)</span>
+			<span class="token keyword">if</span> <span class="token operator">not</span> <span class="token builtin">bool</span><span class="token punctuation">(</span>Mould<span class="token punctuation">.</span>query<span class="token punctuation">.</span>filter_by<span class="token punctuation">(</span>fill_time<span class="token operator">=</span>fill_time<span class="token punctuation">,</span>
+			injection_pres<span class="token operator">=</span>injection_pres<span class="token punctuation">,</span>
+			holding_pres<span class="token operator">=</span>holding_pres<span class="token punctuation">,</span>
+			holding_time<span class="token operator">=</span>holding_time<span class="token punctuation">,</span>
+			cooling_time<span class="token operator">=</span>cooling_time<span class="token punctuation">,</span>
+			mould_temp<span class="token operator">=</span>mould_temp<span class="token punctuation">,</span>
+			clamp_force<span class="token operator">=</span>clamp_force<span class="token punctuation">,</span>
+			shot_weight<span class="token operator">=</span>shot_weight<span class="token punctuation">,</span>
+			mould_SA<span class="token operator">=</span>mould_SA<span class="token punctuation">,</span>
+			mould_vol<span class="token operator">=</span>mould_vol<span class="token punctuation">,</span>
+			cavity_SA<span class="token operator">=</span>cavity_SA<span class="token punctuation">,</span>
+			cavity_vol<span class="token operator">=</span>cavity_vol<span class="token punctuation">,</span>
+			melt_temp<span class="token operator">=</span>melt_temp<span class="token punctuation">,</span>
+			mat_density<span class="token operator">=</span>mat_density<span class="token punctuation">,</span>
+			mat_GF<span class="token operator">=</span>mat_GF<span class="token punctuation">,</span>
+			mat_MMFR<span class="token operator">=</span>mat_MMFR<span class="token punctuation">,</span>
+			part_weight<span class="token operator">=</span>part_weight<span class="token punctuation">,</span>
+			<span class="token punctuation">)</span><span class="token punctuation">.</span>first<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                entry_to_create<span class="token punctuation">.</span>add_self<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                count <span class="token operator">=</span> count <span class="token operator">+</span> <span class="token number">1</span>
+			<span class="token keyword">if</span> count <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+			         flash<span class="token punctuation">(</span>f<span class="token string">'CSV dataset added successfully and {count} duplicate values were ignored'</span><span class="token punctuation">,</span> <span class="token string">'success'</span><span class="token punctuation">)</span>
+			     <span class="token keyword">else</span><span class="token punctuation">:</span>
+			         flash<span class="token punctuation">(</span>f<span class="token string">'CSV dataset added successfully'</span><span class="token punctuation">,</span> <span class="token string">'success'</span><span class="token punctuation">)</span>
+			     <span class="token keyword">if</span> zeroCount <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+			         flash<span class="token punctuation">(</span>f<span class="token string">'{zeroCount} entries were ignored as they contained 0 values'</span><span class="token punctuation">,</span> <span class="token string">'error'</span><span class="token punctuation">)</span>
     <span class="token keyword">except</span><span class="token punctuation">:</span>
         flash<span class="token punctuation">(</span><span class="token string">'Can\'t import data from CSV file due to incorrect format or the file is empty'</span><span class="token punctuation">,</span> <span class="token string">'error'</span><span class="token punctuation">)</span>
 </code></pre>
@@ -1445,7 +1474,7 @@ This script will auto-hyper tune the model and then retrain it without opening t
 <span class="token command"><span class="token keyword">pip</span> install numpy  </span>
 <span class="token command"><span class="token keyword">pip</span> install pandas   </span>
 <span class="token command"><span class="token keyword">pip</span> install joblib</span>
-<span class="token command"><span class="token keyword">pip</span> install flask_bcrypt</span>
+<span class="token command"><span class="token keyword">pip</span> install flask-bcrypt</span>
 <span class="token command"><span class="token keyword">pip</span> install flask_login</span>
 <span class="token command"><span class="token keyword">pip</span> install email_validator</span>
 </code></pre>
@@ -1462,7 +1491,7 @@ pip <span class="token function">install</span> matplotlib
 pip <span class="token function">install</span> numpy
 pip <span class="token function">install</span> pandas
 pip <span class="token function">install</span> joblib
-pip <span class="token function">install</span> flask_bcrypt
+pip <span class="token function">install</span> flask-bcrypt
 pip <span class="token function">install</span> flask_login
 pip <span class="token function">install</span> email_validator
 </code></pre>

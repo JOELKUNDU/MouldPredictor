@@ -6,10 +6,9 @@ import shutil
 from predictor import app
 from flask import flash, send_file
 
-
-headerLabels = ['Fill Time s','Injection Pressure (MPa)','Holding Pressure MPa','Holding Time s','Total Pack s',
-                'Mould Temp C','Clamp Force Ton','Shot Weight','Mould SA','Mould Vol','Cavity SA','Cavity Vol',
-                'Melt Temp C','Mat Density','GF%','MMFR','Weight']
+headerLabels = ['Fill Time s', 'Injection Pressure (MPa)', 'Holding Pressure MPa', 'Holding Time s', 'Total Pack s',
+                'Mould Temp C', 'Clamp Force Ton', 'Shot Weight', 'Mould SA', 'Mould Vol', 'Cavity SA', 'Cavity Vol',
+                'Melt Temp C', 'Mat Density', 'GF%', 'MMFR', 'Weight']
 
 
 def serverExportCSV():
@@ -41,11 +40,10 @@ def serverExportCSV():
         dataframe.append(data_object)
     dataframe = np.array(dataframe)
     DF = pd.DataFrame(dataframe)
-    source = os.path.join(app.config['CLIENT_CSV'],  'database.csv')
+    source = os.path.join(app.config['CLIENT_CSV'], 'database.csv')
     os.remove(source)
     DF.to_csv(source, index=False, header=headerLabels)
     return send_file(source, as_attachment=True, attachment_filename='database.csv')
-
 
 
 def add_from_csv(filepath):
@@ -53,6 +51,8 @@ def add_from_csv(filepath):
         dataframe = np.genfromtxt(filepath, delimiter=',')
         dataframe = np.delete(dataframe, 0, 0)
         rows = dataframe.shape[0]
+        count = 0
+        zeroCount = 0
         for i in range(0, rows):
             fill_time = dataframe[i][0]
             injection_pres = dataframe[i][1]
@@ -74,6 +74,10 @@ def add_from_csv(filepath):
             mat_GF = dataframe[i][14]
             mat_MMFR = dataframe[i][15]
             part_weight = dataframe[i][16]
+            if 0 in [fill_time, injection_pres, holding_pres, holding_time, cooling_time, mould_temp, clamp_force,
+                     shot_weight, mould_SA, mould_vol, cavity_SA, cavity_vol, melt_temp, mat_density, mat_GF, mat_MMFR,
+                     part_weight]:
+                zeroCount = zeroCount + 1
             entry_to_create = Mould(
                 fill_time=fill_time,
                 injection_pres=injection_pres,
@@ -93,11 +97,36 @@ def add_from_csv(filepath):
                 mat_MMFR=mat_MMFR,
                 part_weight=part_weight,
             )
-            entry_to_create.add_self()
-        flash('CSV dataset added successfully', 'success')
+            if not bool(Mould.query.filter_by(fill_time=fill_time,
+                                              injection_pres=injection_pres,
+                                              holding_pres=holding_pres,
+                                              holding_time=holding_time,
+                                              cooling_time=cooling_time,
+                                              mould_temp=mould_temp,
+                                              clamp_force=clamp_force,
+                                              shot_weight=shot_weight,
+                                              mould_SA=mould_SA,
+                                              mould_vol=mould_vol,
+                                              cavity_SA=cavity_SA,
+                                              cavity_vol=cavity_vol,
+                                              melt_temp=melt_temp,
+                                              mat_density=mat_density,
+                                              mat_GF=mat_GF,
+                                              mat_MMFR=mat_MMFR,
+                                              part_weight=part_weight,
+                                              ).first()):
+                entry_to_create.add_self()
+            else:
+                count = count + 1
+        if count != 0:
+            flash(f'CSV dataset added successfully and {count} duplicate values were ignored', 'success')
+        else:
+            flash(f'CSV dataset added successfully', 'success')
+        if zeroCount != 0:
+            flash(f'{zeroCount} entries were ignored as they contained 0 values', 'error')
+
     except:
         flash('Can\'t import data from CSV file due to incorrect format or the file is empty', 'error')
-
 
 
 def get_datasets():
@@ -136,7 +165,7 @@ def get_datasets():
 
         return x, y
     else:
-        return[[]], []
+        return [[]], []
 
 
 def exportCSVFormat():
@@ -152,8 +181,9 @@ def exportCSVFormat():
         shutil.copyfile(source, dest)
         return True
 
+
 def serverExportCSVFormat():
-    source = os.path.join(app.config['CLIENT_CSV'],  'format.csv')
+    source = os.path.join(app.config['CLIENT_CSV'], 'format.csv')
     return send_file(source, as_attachment=True, attachment_filename='format.csv')
 
 

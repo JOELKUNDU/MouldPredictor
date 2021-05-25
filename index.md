@@ -78,7 +78,7 @@ pip install matplotlib
 pip install numpy  
 pip install pandas   
 pip install joblib
-pip install flask_bcrypt
+pip install flask-bcrypt
 pip install flask_login
 pip install email_validator
 ```
@@ -285,7 +285,9 @@ def add_from_csv(filepath):
         dataframe = np.genfromtxt(filepath, delimiter=',')  
         dataframe = np.delete(dataframe, 0, 0)  
         rows = dataframe.shape[0]  
-        for i in range(0, rows):  
+        count = 0  
+		zeroCount = 0  
+		for i in range(0, rows):  
             fill_time = dataframe[i][0]  
             injection_pres = dataframe[i][1]  
             holding_pres = dataframe[i][2]  
@@ -306,7 +308,9 @@ def add_from_csv(filepath):
             mat_GF = dataframe[i][14]  
             mat_MMFR = dataframe[i][15]  
             part_weight = dataframe[i][16]  
-            entry_to_create = Mould(  
+            if 0 in [fill_time, injection_pres, holding_pres, holding_time, cooling_time, mould_temp, clamp_force, shot_weight, mould_SA, mould_vol, cavity_SA, cavity_vol, melt_temp, mat_density, mat_GF, mat_MMFR, part_weight]:  
+                zeroCount = zeroCount + 1  
+			entry_to_create = Mould(  
 									fill_time=fill_time,  
 									injection_pres=injection_pres,  
 									holding_pres=holding_pres,  
@@ -325,8 +329,33 @@ def add_from_csv(filepath):
 									mat_MMFR=mat_MMFR,  
 									part_weight=part_weight,  
 									)  
-            entry_to_create.add_self()  
-        flash('CSV dataset added successfully', 'success')  
+			if not bool(Mould.query.filter_by(fill_time=fill_time,  
+			injection_pres=injection_pres,  
+			holding_pres=holding_pres,  
+			holding_time=holding_time,  
+			cooling_time=cooling_time,  
+			mould_temp=mould_temp,  
+			clamp_force=clamp_force,  
+			shot_weight=shot_weight,  
+			mould_SA=mould_SA,  
+			mould_vol=mould_vol,  
+			cavity_SA=cavity_SA,  
+			cavity_vol=cavity_vol,  
+			melt_temp=melt_temp,  
+			mat_density=mat_density,  
+			mat_GF=mat_GF,  
+			mat_MMFR=mat_MMFR,  
+			part_weight=part_weight,  
+			).first()):  
+                entry_to_create.add_self()  
+            else:  
+                count = count + 1  
+			if count != 0:  
+			         flash(f'CSV dataset added successfully and {count} duplicate values were ignored', 'success')  
+			     else:  
+			         flash(f'CSV dataset added successfully', 'success')  
+			     if zeroCount != 0:  
+			         flash(f'{zeroCount} entries were ignored as they contained 0 values', 'error')  
     except:  
         flash('Can\'t import data from CSV file due to incorrect format or the file is empty', 'error')
 ```
@@ -1513,7 +1542,7 @@ pip install matplotlib
 pip install numpy  
 pip install pandas   
 pip install joblib
-pip install flask_bcrypt
+pip install flask-bcrypt
 pip install flask_login
 pip install email_validator
 ```
@@ -1531,7 +1560,7 @@ pip install matplotlib
 pip install numpy  
 pip install pandas   
 pip install joblib
-pip install flask_bcrypt
+pip install flask-bcrypt
 pip install flask_login
 pip install email_validator
 ```
