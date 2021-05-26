@@ -12,3 +12,4 @@ pip install joblib
 pip install flask_bcrypt
 pip install flask_login
 pip install email_validator
+pip install markdown2

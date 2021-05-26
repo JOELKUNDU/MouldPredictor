@@ -9,7 +9,7 @@ import numpy as np
 from werkzeug.utils import secure_filename
 import os
 from flask_login import login_user, logout_user, login_required
-
+import markdown2 as md
 
 @app.route('/')
 @app.route('/home')
@@ -27,10 +27,11 @@ def main_page():
 @login_required
 def predict_page():
     predict_form = PredictForm()
-    output = np.zeros(shape=10)
+    output = np.zeros(shape=17)
+    altOutputs = []
     if request.method == 'POST':
         if predict_form.validate_on_submit():
-            output = ml.predict(
+            output, altOutputs = ml.predict(
                 Fill_time_min=predict_form.Fill_time_min.data,
                 Fill_time_max=predict_form.Fill_time_max.data,
                 Fill_time_res=predict_form.Fill_time_res.data,
@@ -62,18 +63,20 @@ def predict_page():
                 Mat_MMFR=predict_form.Mat_MMFR.data
             )
             print('Results: ', output)
+            print('ALT Results: ', altOutputs)
             if not output:
                 output = [0.0, 0.0, 0.0, 0.0, 0.0]
                 flash('No optimal machine parameters were found for the given constraints', 'error')
-                return render_template('predict.html', form=predict_form, output=output)
+                return render_template('predict.html', form=predict_form, output=output, altOutputs=altOutputs)
             else:
                 flash('Successfully found optimal parameters', 'Success')
-                return render_template('predict.html', form=predict_form, output=output)
+                return render_template('predict.html', form=predict_form, output=output, altOutputs=altOutputs)
         if predict_form.errors != {}:
             flash('Invalid values in Predict Form', category='error')
             return redirect(url_for('predict_page'))
     if request.method == 'GET':
-        return render_template('predict.html', form=predict_form, output=output)
+        return render_template('predict.html', form=predict_form, output=output, altOutputs=altOutputs)
+
 
 
 @app.route('/model-page', methods=['POST', 'GET'])
@@ -90,23 +93,13 @@ def model_page():
         if retrain:
             ml.retrain()
             flash('Model Retrained Successfully', 'success')
-            return render_template('model.html',
-                                   absMeanError=absMeanError,
-                                   modelScore=modelScore,
-                                   maxError=maxError,
-                                   RetrainModel=retrainmodel,
-                                   HyperTuneModel=hypertunemodel)
+            return redirect(url_for('model_page'))
         retrain = request.form.get('HyperTune-model')
         if retrain:
             flash('Model HyperTuned Successfully', 'success')
             flash('If the model\'s performance has decreased then you need to run the HyperTune utility again', 'info')
             ml.hyperTune()
-            return render_template('model.html',
-                                   absMeanError=absMeanError,
-                                   modelScore=modelScore,
-                                   maxError=maxError,
-                                   RetrainModel=retrainmodel,
-                                   HyperTuneModel=hypertunemodel)
+            return redirect(url_for('model_page'))
     if request.method == 'GET':
         return render_template('model.html',
                                absMeanError=absMeanError,
@@ -235,7 +228,10 @@ def database_page():
 @app.route('/help-page')
 @login_required
 def help_page():
-    return render_template('help.html')
+    with open('index.md', 'r') as f:
+        text = f.read()
+        html = md.markdown(text, extras=["fenced-code-blocks","cuddled-lists","header-ids"])
+    return render_template('help.html', information = html)
 
 
 @app.route('/register', methods=['GET', 'POST'])

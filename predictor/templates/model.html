@@ -2,6 +2,42 @@
 {% block title %}
 Model Information
 {% endblock %}
+{% block navbar %}
+<ul>
+	<li>
+		<a href="{{ url_for( 'main_page' ) }}">
+			<button class="normal-btn"> Home </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'predict_page' ) }}">
+			<button class="normal-btn"> Predict </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'model_page' ) }}">
+			<button class="normal-btn2"> Model </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'database_page' ) }}">
+			<button class="normal-btn"> Database </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'help_page' ) }}">
+			<button class="normal-btn"> Help </button>
+		</a>
+	</li>
+</ul>
+<ul style="float: right">
+	<li >
+		</h1><a href="{{ url_for( 'logout_page' ) }}">
+			<button class="normal-btn"> Logout </button>
+		</a>
+	</li>
+</ul>
+{% endblock %}
 {% block content %}
 <div>
 	<section class="banner-body dark2">
@@ -11,6 +47,11 @@ Model Information
 				This page allows you to manage the Artificial Neural Network.<br>
 				You can refer <a href="{{ url_for( 'help_page' ) }}" class="text-link"> Help </a> for more information
 			</p>
+			<h5><strong>IMPORTANT</strong><br>
+				It is important that the ANN model is regularly retrained on the data that is being added into the database.<br>
+				If you have just added a single entry to the database then please use the Retrain the Model button shown at the bottom of this screen.<br>
+				If you have just added multiple entries via a csv file then please use the Auto-HyperTune the Model button shown at the bottom of the screen.<br>
+			</h5>
 		</div>
 	</section>
     <section class="page-body dark2">
@@ -33,13 +74,13 @@ Model Information
         </div>
     </section>
     <section class="form-body dark2">
-	<!--
 		<div class="form-div2">
 			<form method="POST" class="form">
 				{{RetrainModel.hidden_tag()}}
 				<div class="Title-text">
 					<h3>Retrain the ML model</h3>
-                    <h5>NOTE: This might take a very long time</h5>
+                    <h5>NOTE: This might take a very long time.
+					</h5>
 				</div>
 				<div class="form-row2">
 					<input id="Retrain-model" name="Retrain-model" type="hidden" value="True" onclick="$('#loading').show();"> {{ RetrainModel.submit(class = "normal-btn") }}
@@ -47,13 +88,13 @@ Model Information
 				<div id="loading" style="display:none;"><img src="{{ url_for('static', filename='resources/loading.gif') }}" alt="" />Loading!</div>
 			</form>
 		</div>
-	-->
+
         <div class="form-div2">
 			<form method="POST" class="form">
 				{{HyperTuneModel.hidden_tag()}}
 				<div class="Title-text">
 					<h3>Auto HyperTune the ML model</h3>
-                    <h5>NOTE: This might take a very long time, you can leave this page.</h5>
+                    <h5>NOTE: This might take a very long time.
 				</div>
 				<div class="form-row2">
 					<input id="HyperTune-model" name="HyperTune-model" type="hidden" value="True" onclick="$('#loading').show();"> {{ HyperTuneModel.submit(class = "normal-btn") }}

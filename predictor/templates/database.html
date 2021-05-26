@@ -1,4 +1,43 @@
-{% extends 'base.html' %} {% block title %} Database Information {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Database Information {% endblock %}
+{% block navbar %}
+<ul>
+	<li>
+		<a href="{{ url_for( 'main_page' ) }}">
+			<button class="normal-btn"> Home </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'predict_page' ) }}">
+			<button class="normal-btn"> Predict </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'model_page' ) }}">
+			<button class="normal-btn"> Model </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'database_page' ) }}">
+			<button class="normal-btn2"> Database </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'help_page' ) }}">
+			<button class="normal-btn"> Help </button>
+		</a>
+	</li>
+</ul>
+<ul style="float: right">
+	<li >
+		</h1><a href="{{ url_for( 'logout_page' ) }}">
+			<button class="normal-btn"> Logout </button>
+		</a>
+	</li>
+</ul>
+{% endblock %}
+
+
+{% block content %}
 <div>
 	<section class="banner-body dark2">
 		<div class="Title-text">
@@ -8,6 +47,14 @@
 				This page allows you to manage the database on which the ANN is trained on.<br>
 				You can refer <a href="{{ url_for( 'help_page' ) }}" class="text-link"> Help </a> for more information
 			</p>
+			<h5><strong>IMPORTANT</strong><br>
+				If you are importing data via CSV or you are adding a single data entry, please replace all zero and null values with the value 1<br>
+				Entries with zero values will be ignored when importing into the database<br>
+				Data entries already present in the database will also be ignored.<br>
+				It is important that the ANN model is regularly retrained on the data that is being added into the database.<br>
+				If you have just added a single entry to the database then please use the Retrain the Model button shown at the bottom of the Model screen.<br>
+				If you have just added multiple entries via a csv file then please use the Auto-HyperTune the Model button shown at the bottom of the Model screen.<br>
+			</h5>
 		</div>
 	</section>
 	<section class="form-body dark2">
@@ -79,10 +126,10 @@
 				<div>
 					{{ AddEntryCSV.hidden_tag() }}
 				<h3>Upload CSV file with data</h3>
-					<h5>Choose the csv file to upload.</h5>
+					<h4>Choose the csv file to upload.</h4>
 				<div class="form-row">
 				{{ AddEntryCSV.file( class = "form-input-file" ) }} </div>
-				<div class="form-row2"> {{ AddEntryCSV.submit(class = "normal-btn") }} </div>
+				<div class="form-row2"> {{ AddEntryCSV.submit(class = "normal-btn", style="width:60%")  }} </div>
 				</div>
 			</form>
 			<form method="POST" class="form">
@@ -105,7 +152,6 @@
 			<table class="table1 table-dark">
 				<thead>
 					<tr>
-						<th scope="col">SNo.</th>
 						<th scope="col">Fill Time</th>
 						<th scope="col">Injection Pressure</th>
 						<th scope="col">Holding Pressure</th>
@@ -129,7 +175,6 @@
 				</thead>
 				<tbody> {% for entry in entries %}
 					<tr>
-						<td>{{ entry.id }}</td>
 						<td>{{ entry.fill_time }}</td>
 						<td>{{ entry.injection_pres }}</td>
 						<td>{{ entry.holding_pres }}</td>

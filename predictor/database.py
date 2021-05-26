@@ -6,6 +6,7 @@ import shutil
 from predictor import app
 from flask import flash, send_file
 
+
 headerLabels = ['Fill Time s', 'Injection Pressure (MPa)', 'Holding Pressure MPa', 'Holding Time s', 'Total Pack s',
                 'Mould Temp C', 'Clamp Force Ton', 'Shot Weight', 'Mould SA', 'Mould Vol', 'Cavity SA', 'Cavity Vol',
                 'Melt Temp C', 'Mat Density', 'GF%', 'MMFR', 'Weight']
@@ -132,7 +133,6 @@ def add_from_csv(filepath):
 def get_datasets():
     entries = Mould.query.all()
     dataframe = []
-
     if entries:
         for entry in entries:
             data_object = [
@@ -162,7 +162,6 @@ def get_datasets():
 
         x = dataframe[:, :dataframe.shape[1] - 1]
         y = dataframe[:, dataframe.shape[1] - 1]
-
         return x, y
     else:
         return [[]], []

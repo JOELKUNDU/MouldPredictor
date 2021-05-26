@@ -84,6 +84,7 @@ a{
 }
 
 .form-input-file{
+    width:100%;
     background: black;
     margin-left:10px;
     border: 1px solid white;
@@ -208,6 +209,16 @@ code{
 	font-size: 1em;
 	border-radius: 7px;
 }
+.normal-btn2 {
+	background-color: white;
+	color: #212121;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	border: 2px solid white;
+	padding: 10px;
+	font-size: 1em;
+	transform: scale(1.2);
+	border-radius: 10px;
+}
 
 .normal-btn:hover {
 	background-color: white;
@@ -290,8 +301,8 @@ nav li {
 }
 
 .help1{
-    padding-left:50px;
-    padding-right:50px;
+    padding-left: 5%;
+    padding-right:5%;
 }
 
 nav {

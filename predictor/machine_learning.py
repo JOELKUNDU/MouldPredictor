@@ -10,7 +10,7 @@ import predictor.database as database
 from predictor.models import DBModelMetrics
 from sklearn.model_selection import RandomizedSearchCV
 from flask import flash
-
+import operator
 matplotlib.use('Agg')
 
 
@@ -38,39 +38,23 @@ class ModelMetrics:
 
 ml_metrics = ModelMetrics()
 
-'''
-BEST PARAMS {
-'warm_start': True, 
-'verbose': True, 
-'solver': 'adam', 
-'random_state': 1399, 
-'max_iter': 125000, 
-'learning_rate_init': 0.0001, 
-'learning_rate': 'constant', 
-'hidden_layer_sizes': (50, 50, 50), 
-'alpha': 0.0001, 
-'activation':'relu'
-}
-'''
-
-
 def hyperTune():
     parameter_space = {
-        'hidden_layer_sizes': [(50, 50, 50)],
-        'activation': ['tanh', 'relu', 'logistic', 'identity'],
-        'solver': ['sgd', 'adam', 'lbfgs'],
-        'alpha':  np.arange(0.0001, 0.09, 100),
-        'learning_rate': ['constant', 'adaptive', 'invscaling'],
-        'learning_rate_init': np.arange(0.0001, 0.09, 100),
+        'hidden_layer_sizes': [(64,64,64,), (256,256,256,),(125,125,125,)],
+        'activation': ['relu'],
+        'solver': ['adam'],
+        'alpha':  np.arange(0.0001, 0.001, 0.00002),
+        'learning_rate': ['adaptive'],
+        'learning_rate_init': np.arange(0.0001, 0.001, 0.00002),
         'random_state': [1399],
         'warm_start': [True],
-        'max_iter': [100000, 75000, 125000, 250000, 350000],
+        'max_iter': np.arange(100, 250000,1),
         'verbose': [True]
     }
     trained_model = MLPRegressor()
     X, y = database.get_datasets()
     X, X_test, y, y_test = train_test_split(X, y, test_size=0.33, random_state=1)
-    clf = RandomizedSearchCV(trained_model, parameter_space, n_jobs=-1, cv=2, verbose=10)
+    clf = RandomizedSearchCV(trained_model, parameter_space, n_jobs=8, cv=2, verbose=1)
     clf.fit(X, y)
     print('\n\n\nBEST PARAMS', clf.best_params_)
     print('\n\n\nResults', clf.cv_results_)
@@ -90,8 +74,10 @@ def hyperTune():
     plt.title('Scatter Plot (Actual vs Predicted Part Weight)')
     plt.savefig('predictor/static/ML/performance.png', bbox_inches='tight')
     ml_metrics.loadPerformance()
+    ml_metrics.printMetric()
     jl.dump(clf, 'predictor/static/ML/config.joblib')
-    flash('HyperTuning Complete', 'success')
+    flash('HyperTuning Complete', 'info')
+
 
 
 def MLPRmodel(X_test):
@@ -121,6 +107,7 @@ def init_load_up():
         ml_metrics.modelScore = getScore()
         ml_metrics.max_error = metrics.max_error(y_test, pred)
         ml_metrics.savePerformance()
+        ml_metrics.printMetric()
 
         plt.scatter(y_test, pred, color='b')
         plt.xlabel('Actual Weight')
@@ -211,14 +198,21 @@ def predict(
 
     try:
         minErrorParameter = []
+        nextBestParameter = []
         minErrorValue = abs(param[0][17] - param[0][16])
         for parameter in param:
             error = abs(parameter[17] - parameter[16])
+            parameter.append((error/parameter[17])*100)
+            nextBestParameter.append(parameter)
             if abs(error < minErrorValue):
                 minErrorParameter = parameter
                 minErrorValue = error
                 print(' * Current Minimum: ', parameter)
                 print(' * min error value: ', minErrorValue)
-        return minErrorParameter
+        nextBestParameter = sorted(nextBestParameter, key=operator.itemgetter(18))
+        if len(nextBestParameter) > 10:
+            return minErrorParameter, nextBestParameter[:9]
+        else:
+            return minErrorParameter, nextBestParameter[:len(nextBestParameter)-1]
     except:
-        return []
+        return [], []

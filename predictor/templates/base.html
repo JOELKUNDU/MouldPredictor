@@ -10,40 +10,7 @@
 </head>
 <body>
 	<nav>
-		<ul>
-			<li>
-				<a href="{{ url_for( 'main_page' ) }}">
-					<button class="normal-btn"> Home </button>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for( 'predict_page' ) }}">
-					<button class="normal-btn"> Predict </button>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for( 'model_page' ) }}">
-					<button class="normal-btn"> Model </button>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for( 'database_page' ) }}">
-					<button class="normal-btn"> Database </button>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for( 'help_page' ) }}">
-					<button class="normal-btn"> Help </button>
-				</a>
-			</li>
-		</ul>
-		<ul style="float: right">
-			<li >
-				</h1><a href="{{ url_for( 'logout_page' ) }}">
-					<button class="normal-btn"> Logout </button>
-				</a>
-			</li>
-		</ul>
+		{% block navbar %} {% endblock %}
 	</nav>
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	  {% if messages %}

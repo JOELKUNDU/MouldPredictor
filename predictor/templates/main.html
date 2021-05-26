@@ -1,16 +1,46 @@
-{% extends 'base.html' %} {% block title %} Main page {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Main page {% endblock %}
+{% block navbar %}
+<ul>
+	<li>
+		<a href="{{ url_for( 'main_page' ) }}">
+			<button class="normal-btn2"> Home </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'predict_page' ) }}">
+			<button class="normal-btn"> Predict </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'model_page' ) }}">
+			<button class="normal-btn"> Model </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'database_page' ) }}">
+			<button class="normal-btn"> Database </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'help_page' ) }}">
+			<button class="normal-btn"> Help </button>
+		</a>
+	</li>
+</ul>
+<ul style="float: right">
+	<li >
+		<a href="{{ url_for( 'logout_page' ) }}">
+			<button class="normal-btn"> Logout </button>
+		</a>
+	</li>
+</ul>
+{% endblock %}
+{% block content %}
 <div>
 	<section class="page-body dark2">
 		<div class="Title-text">
 			<h1>Predictor for Machine Parameters <br> for <br> Injection Moulding Parameters.</h1> </div>
-		<div class="para-text">
-			<p>
-
-			</p>
-		</div>
 		<div class="para-text" style="text-align:center;">
-			<br>
-			<br>
 			<h3> Please follow the following steps to make predictions using the utility.
 			</h3>
 			<br>
@@ -23,9 +53,12 @@
 			<p> &nbsp;4. The predicted values will be shown in the output section.
 			</p>
 			<br>
-			<br>
 			<a href="{{ url_for( 'predict_page' ) }}" >
 					<button class="normal-btn" style="width:512px;"> Make a Prediction </button>
+			</a>
+			<br><br><br>
+			<a href="{{ url_for( 'help_page' ) }}" >
+					Need Help?
 			</a>
 		</div>
 	</section>

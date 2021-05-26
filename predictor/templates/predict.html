@@ -1,19 +1,59 @@
-{% extends 'base.html' %} {% block title %} Prediction Page {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Prediction Page {% endblock %}
+{% block navbar %}
+<ul>
+	<li>
+		<a href="{{ url_for( 'main_page' ) }}">
+			<button class="normal-btn"> Home </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'predict_page' ) }}">
+			<button class="normal-btn2"> Predict </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'model_page' ) }}">
+			<button class="normal-btn"> Model </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'database_page' ) }}">
+			<button class="normal-btn"> Database </button>
+		</a>
+	</li>
+	<li>
+		<a href="{{ url_for( 'help_page' ) }}">
+			<button class="normal-btn"> Help </button>
+		</a>
+	</li>
+</ul>
+<ul style="float: right">
+	<li >
+		<a href="{{ url_for( 'logout_page' ) }}">
+			<button class="normal-btn"> Logout </button>
+		</a>
+	</li>
+</ul>
+{% endblock %}{% block content %}
 <div>
 	<section class="banner-body dark2">
 		<div class="Title-text">
 			<h1>Prediction Page</h1>
 			<p>
-				This page allows you predict optimal machine parameters.2<br>
+				This page allows you predict optimal machine parameters.<br>
 				You can refer <a href="{{ url_for( 'help_page' ) }}" class="text-link"> Help </a> for more information
 			</p>
+			<h5><strong>IMPORTANT</strong><br>
+				Please input the value 1 in place of zero for missing values in the predict from below.<br>
+				An Invalid Value error will be shown if Zero or Null is entered in the Predict form shown below<br>
+			</h5>
 		</div>
 	</section>
 	<section class="form-body dark2">
 		<div class="form-div">
 			<form method="post" class="form"> {{ form.hidden_tag() }}
 				<h2>Predict Form</h2>
-				<h3>Fill the form below to get the predict optimal machine parameters</h3>
+				<h3>Fill the form below to predict optimal machine parameters</h3>
 				<h3>PART 1 Process Parameters</h3>
 				<div class="form-block">
                     <div class="form-row">Fill Time (in seconds)</div>
@@ -92,6 +132,31 @@
 				<a href="{{ url_for('predict_page') }}">
 					<button class="normal-btn">Predict Again</button>
 				</a>
+				<br><br><br>
+				<h4>The table shown below contains the 10 next best predictions sorted by increasing error.</h4>
+				{% if altOutputs is defined %}
+				<table class="table1 table-dark">
+					<thead>
+						<tr>
+							<th scope="col">Fill Time</th>
+							<th scope="col">Injection Pressure</th>
+							<th scope="col">Holding Pressure</th>
+							<th scope="col">Holding Time</th>
+							<th scope="col">Cooling Time</th>
+							<th scope="col">ERROR</th>
+						</tr>
+					</thead>
+					<tbody> {% for outputs in altOutputs %}
+						<tr>
+							<td> {{ outputs[0] }}</td>
+							<td> {{ outputs[1] }}</td>
+							<td> {{ outputs[2] }}</td>
+							<td> {{ outputs[3] }}</td>
+							<td> {{ outputs[4] }}</td>
+							<td> {{ (outputs[18]|round(5)) }} %</td>
+						</tr> {% endfor %} </tbody>
+				</table>
+				{% endif %}
 			</section>
 		</div>
 	</section>
