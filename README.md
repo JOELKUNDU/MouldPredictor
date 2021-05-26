@@ -1,4 +1,5 @@
-﻿## Introduction  
+# Moulding Machine Parameter Predictor
+## Introduction  
 Injection moulding is the most popular and widely used manufacturing process for the mass production of plastic products. In the process, a polymer is melted by electric and frictional heat and is injected into a metal mould under high pressure. The quality of the part produced is greatly influenced by process conditions. These process conditions can be changed by changing the machine parameters and is usually done by an experienced engineer. Whenever a new mould is created an engineer will experimentally determine the optimal parameters via repeated trials and visual inspection of the created product. This method is necessary as there is no theoretical method to predict the quality of the part produced given a set of machine parameters. This makes the process highly dependant on the knowledge and experience of the engineer which makes it hard to transfer the skill to a new operator. Wastage in the form of defective products, machine downtime, labour and energy also happen due to the experimental method. Another alternative to the experimental method is simulations. However, simulations are slow and computationally expensive.  
   
 Machine learning is a subset of artificial intelligence and is the area of computational science that focuses on analysing and interpreting pattern and structures in data to enable learning, reasoning and decision making outside of human interaction. Machine learning allows the user to feed a computer algorithm with a lot of data and have the computer analyse and make data-driven recommendations and decisions based on only the input data. Leveraging these benefits of machine learning, the author is designing a utility that can predict the optimal machine parameters as an output while taking mould geometry details, raw material properties and known process parameters as the inputs.  
@@ -37,7 +38,7 @@ pip install flask_login
 pip install email_validator
 pip install markdown2  
 ```  
-  
+___
 ## Download  
 ##### Option 1: 
 Users can download the latest release from [here](https://github.com/JOELKUNDU/MouldPredictor/releases).  
